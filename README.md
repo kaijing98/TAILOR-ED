@@ -9,8 +9,7 @@ On the Angular platform - we offer a safe community centered around mental healt
 
 ## Getting Started
 
-* Clone the project, navigate to `tailoredJsf` folder
-* Create database in Netbeans: `database name: tailoredJsf`
+* Clone the project, Create database in Netbeans: `database name: tailoredJsf`
 * Deploy the code in Netbeans 
 * Navigate to http://localhost:8080/tailoredJsf-war/index.xhtml to access the website for sellers and admins.
 * Test login using the following credentials:
