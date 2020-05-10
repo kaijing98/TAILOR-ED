@@ -1,0 +1,49 @@
+<div class="container">
+    <section id="content" class="content">
+        <div class="artworkheader-bg">
+            <div class="container">
+                <div class="content-center">
+                    <h5 class="text-center"></h5>
+                    <h2 class="text-center">Delete the current Post</h2>
+                    <h5 class="text-center"></h5>
+                </div>
+            </div>
+        </div>
+        <br />
+
+        <div *ngIf="error == true" style="color:red;">
+            {{message}}
+        </div>
+
+        <div *ngIf="error == false">
+            <a routerLink="/pages/viewAllMyPosts">Back</a>
+        </div>
+        <br />
+        
+
+        <table *ngIf="error == false" width="100%">
+            <tr>
+                <td width="20%" style="font-weight: bold;">Post ID</td>
+                <td>{{postToDelete.postId}}</td>
+            </tr>
+            <tr>
+                <td width="20%" style="font-weight: bold;">Post Title</td>
+                <td>{{postToDelete.topic}}</td>
+            </tr>
+            <tr>
+                <td width="20%" style="font-weight: bold;"></td>
+                <td>______________________________________________________________________________________________________________________________</td>
+            </tr>
+            <tr>
+                <td width="20%" style="font-weight: bold;">Post Content</td>
+                <td>{{postToDelete.content}}</td>
+            </tr>
+            <tr>
+                <td colspan="3" style="text-align: right;">					
+                    <button (click)="deletePost()">Delete</button>
+                </td>
+            </tr>
+            
+        </table>
+    </section>
+    </div>

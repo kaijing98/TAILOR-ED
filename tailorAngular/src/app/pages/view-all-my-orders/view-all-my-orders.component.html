@@ -1,0 +1,103 @@
+<div class="container">
+    <div class="artworkheader-bg">
+        <div class="container">
+            <div class="content-center">
+                <h5 class="text-center"></h5>
+                <h2 class="text-center">View All My Orders</h2>
+                <h5 class="text-center"></h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <h4 class="text-center">Artwork Orders</h4>
+            <form>
+                <table class="table table-hover">
+                    <thead>
+                        <th scope="col">OrderId</th>
+                        <th scope="col">Item</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Seller</th>
+                        <th scope="col">Contact Email</th>
+                        <th scope="col">Order Status</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let ao of artworkOrders">
+                            <td>
+                                <ngb-highlight [result]="ao.orderId"></ngb-highlight>
+                            </td>
+                            <td>
+                                <ngb-highlight [result]="ao.artwork.name"></ngb-highlight>
+                            </td>
+                            <td>
+                                <ngb-highlight [result]="ao.quantity"></ngb-highlight>
+                            </td>
+                            <td>
+                                <ngb-highlight [result]="ao.priceAtTimeOfPurchase"></ngb-highlight>
+                            </td>
+                            <td>
+                                <ngb-highlight [result]="ao.artwork.seller.username"></ngb-highlight>
+                            </td>
+                            <td>
+                                <ngb-highlight [result]="ao.artwork.seller.email"></ngb-highlight>
+                            </td>
+                            <td>
+                                <ngb-highlight [result]="ao.orderStatusEnum"></ngb-highlight>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+
+            <h4 class="text-center">SelfCareBox Orders</h4>
+            <form>
+                <table class="table table-hover">
+                    <thead>
+                        <th scope="col">OrderId</th>
+                        <th scope="col">Item</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Price after discount</th>
+                        <th scope="col">Subscription Duration</th>
+                        <th scope="col">Total Price</th>
+                        <th scope="col">Seller</th>
+                        <th scope="col">Contact Email</th>
+                        <th scope="col">Order Status</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let so of selfCareBoxOrders">
+                            <td>
+                                <ngb-highlight [result]="so.orderId"></ngb-highlight>
+                            </td>
+                            <td>
+                                <ngb-highlight [result]="so.selfCareBox.name"></ngb-highlight>
+                            </td>
+                            <td>
+                                <ngb-highlight [result]="so.quantity"></ngb-highlight>
+                            </td>
+                            <td>
+                                <ngb-highlight [result]="so.pricePerMthAtPurchase"></ngb-highlight>
+                            </td>
+                            <td>
+                                <ngb-highlight [result]="so.durationEnum"></ngb-highlight>
+                            </td>
+                            <td>
+                                <ngb-highlight [result]="so.totalPriceAtPurchase"></ngb-highlight>
+                            </td>
+                            <td>
+                                <ngb-highlight [result]="so.selfCareBox.seller.username"></ngb-highlight>
+                            </td>
+                            <td>
+                                <ngb-highlight [result]="so.selfCareBox.seller.email"></ngb-highlight>
+                            </td>
+                            <td>
+                                <ngb-highlight [result]="so.orderStatusEnum"></ngb-highlight>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>

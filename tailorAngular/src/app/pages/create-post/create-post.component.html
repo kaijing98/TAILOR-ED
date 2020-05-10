@@ -1,0 +1,87 @@
+<div class="container">
+    <div class="artworkheader-bg">
+        <div class="container">
+            <div class="content-center">
+                <h5 class="text-center"></h5>
+                <h3 class="text-center">Create new Post</h3>
+                <h5 class="text-center">Share your experiences with those who're walking the journey with you.</h5>
+            </div>
+        </div>
+    </div>
+
+
+        <div *ngIf="resultSuccess == true" style="color:blue;">
+            {{message}}
+        </div>
+        
+        <div *ngIf="resultError == true" style="color:red;">
+            {{message}}
+        </div>
+
+        <div style="padding-top: 3%;padding-bottom: 3%">
+            <a class="btn btn-outline-info" routerLink="/pages/storyboard">Back</a>
+        </div>
+
+        <form #createPostForm="ngForm" (ngSubmit)="create(createPostForm)" >
+        
+            <table width="100%">
+                <tr>
+                    <td width="20%" style="font-weight: bold">Title of the Post</td>
+                    <td>
+                        <input id="topic" name="topic" #topic="ngModel" type="text" [(ngModel)]="newPost.topic" required="true"/>
+                    </td>
+                        <td>
+                            <div *ngIf="topic.invalid && (topic.dirty || topic.touched || submitted)" class="errorText">
+                                <div *ngIf="topic.errors.required">
+                                    Post title is required.
+                                </div>
+                            </div>
+                        </td>
+                </tr>
+                 <tr>
+                    <td width="20%" style="font-weight: bold;">Content of the Post</td>
+                    <td><input id="content" name="content" #content="ngModel" type="text" [(ngModel)]="newPost.content" required="true" /></td>
+                    <td>
+                        <div *ngIf="content.invalid && (content.dirty || content.touched || submitted)" class="errorText">
+                            <div *ngIf="content.errors.required">
+                                Content is required.
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <!-- <tr>
+                    <td width="20%" style="font-weight: bold;">Image</td>
+                    <td><input id="image" name="image" #image="ngModel" type="text" [(ngModel)]="newPost.image" required="false" /></td>
+                    <td>
+                        <div *ngIf="image.invalid && (image.dirty || image.touched || submitted)" class="errorText">
+                            <div *ngIf="image.errors.required">
+                                Image is required.
+                            </div>
+                        </div>
+                    </td>
+                </tr>  -->
+                <tr>
+                    <td width="20%" style="font-weight: bold;">Tags</td>
+                    <td>
+                        <select id="tag" name="tag" [(ngModel)]="tagIds" multiple="true">
+                            <option *ngFor="let tag of tags" value="{{tag.tagId}}">{{tag.tagName}}</option>
+                        </select>
+                    </td>
+                    <td>
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="text-align: center;">
+                        <button (click)="clear()">Clear</button>
+                        &nbsp;
+                        <input type="submit" value="Create New Post" />
+                        &nbsp;
+                        <button (click)= viewAllMyPost()>View all my posts</button>
+                        &nbsp;
+                    </td>
+                </tr>
+            </table>            
+        </form>
+
+</div>

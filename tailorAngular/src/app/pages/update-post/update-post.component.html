@@ -1,0 +1,82 @@
+<div class="container">
+<section id="content" class="content">
+	<div class="artworkheader-bg">
+        <div class="container">
+            <div class="content-center">
+                <h5 class="text-center"></h5>
+                <h2 class="text-center">Update current post</h2>
+                <h5 class="text-center"></h5>
+            </div>
+        </div>
+    </div>
+	<br/>
+	
+	<span *ngIf="retrievePostError == true" style="color:red;">post ID {{postId}} does not exist!</span>
+	
+	<div *ngIf="resultSuccess == true" style="color:blue;">
+		{{message}}
+	</div>
+	
+	<div *ngIf="resultError == true" style="color:red;">
+		{{message}}
+	</div>
+	
+	<div *ngIf="retrievePostError == false">
+		<a class="btn btn-outline-info" routerLink="/pages/viewAllMyPosts">Back</a>
+	</div>
+	<br/>	
+		
+    <form *ngIf="retrievePostError == false" #updatePostForm="ngForm" (ngSubmit)="update(updatePostForm)" class="form-horizontal" role="form" class="jumbotron" style="padding: 3%">
+	
+		<table width="100%">
+			<tr>
+				<td width="20%" style="font-weight: bold;">Post Id</td>
+				<td>{{postId}}</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td width="20%" style="font-weight: bold;">Post Title</td>
+				<td><input id="topic" name="topic" #topic="ngModel" type="text" [(ngModel)]="postToUpDate.topic" required="true" /></td>
+				<td>
+					<div *ngIf="topic.invalid && (topic.dirty || topic.touched || submitted)" class="errorText">
+						<div *ngIf="topic.errors.required">
+							Title is required.
+						</div>
+					</div>
+				</td>
+			</tr>
+
+			<tr>
+				<td width="20%" style="font-weight: bold;">content</td>
+				<td><input id="content" name="content" #content="ngModel" type="text" [(ngModel)]="postToUpDate.content" required="true" /></td>
+				<td>
+					<div *ngIf="content.invalid && (content.dirty || content.touched || submitted)" class="errorText">
+						<div *ngIf="description.errors.required">
+							Description is required.
+						</div>
+					</div>
+				</td>
+			</tr>
+			<!-- <tr>
+				<td width="20%" style="font-weight: bold;">Image</td>
+				<td><input id="image" name="image" #image="ngModel" type="text" [(ngModel)]="postToUpDate.image" required="false" /></td>
+				<td>
+					<div *ngIf="image.invalid && (image.dirty || image.touched || submitted)" class="errorText">
+						<div *ngIf="image.errors.required">
+							Image is required.
+						</div>
+					</div>
+				</td>
+			</tr> -->
+			<tr>
+				<td colspan="3" style="text-align: right;">					
+					<input type="submit" value="Update" />
+				</td>
+			</tr>
+			
+		</table>
+		
+	</form>
+	
+</section>
+</div>

@@ -1,0 +1,63 @@
+<div class="container">
+    <div class="artworkheader-bg">
+        <div class="container">
+            <div class="content-center">
+                <h3 class="text-center">Story Board</h3>
+                <h5 class="text-center">Come and share you story, you are not alone.</h5>
+            </div>
+        </div>
+    </div>
+
+
+    <ng-template #content let-modal>
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal-basic-title">User Reported</h4>
+          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+              <div *ngIf="reportSuccess" class="form-group">
+                  <label>You have reported the user.</label>
+              </div>
+              <div *ngIf="userIsBanned && !reportSuccess" class="form-group">
+                  <label>Unable to report user, user is already banned. </label>
+              </div>
+              <div *ngIf="!reportSuccess && !userIsBanned" class="form-group">
+                  <label>Unable to report user, you have already reported this user for the same offence.</label>
+              </div>
+          </form>
+        </div>
+      </ng-template>
+
+    <div class="row">
+
+        <div class="col-3">
+            <div class="list-group">
+                <a class="list-group-item list-group-item-secondary">Filter Posts</a>
+                <a *ngFor="let t of tags" routerLink="/pages/filterPost/{{t.tagId}}"
+                    class="list-group-item list-group-item-action">{{t.tagName}}</a>
+            </div>
+        </div>
+        <div class="col">
+            <div *ngFor="let p of posts" class="jumbotron" style="padding: 3%">
+                <h2 class="display-5">{{p.topic}}</h2>
+                <hr class="my-4" />
+                <p class="lead">{{p.content}}</p>
+                <h6 class="author">posted by: {{p.user.username}}</h6>
+                <h6 class="time">posted on: {{p.dateTime}}</h6>
+<!--                <img src="assets/img/forum-image.png" alt="Welcome to Tailored" width="573" height="276" align="middle">-->
+                <div ngbDropdown class="d-inline-block">
+                    <button class="btn btn-outline-danger" id="dropdownBasic1" ngbDropdownToggle>Report User</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                        <button ngbDropdownItem *ngFor="let o of offences"
+                            (click)="reportUser(p.user.userId, o.offencesId,content)">{{o.name}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+ 
+</div>

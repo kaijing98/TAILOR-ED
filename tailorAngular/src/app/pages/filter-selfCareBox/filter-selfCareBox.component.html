@@ -1,0 +1,41 @@
+<div class="wrapper">
+    <div class="artworkheader-bg">
+        <div class="container">
+            <div class="content-center">
+                <h3 class="text-center">Specially Curated Self-Care Kits</h3>
+                <h5 class="text-center"> Leave time in your schedule to do the things you want to do</h5>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="row">
+            <div class="col-3">
+                <div class="list-group">
+                    <a class="list-group-item list-group-item-action" routerLink="/pages/shopSelfCareBoxes" >View All Self-Care Boxes</a>
+                </div>
+            </div>
+
+            <div class="col">
+                <form>
+                    <div class="row card-group" style="padding-right: 2%">
+                        <div class="col-4" *ngFor="let selfCareBox of filteredSelfCareBox" style="padding-bottom: 3%">
+                            <div class="card" style="width: 100%;height: 100%">
+                                <img class="card-img-top" [src]="'http://localhost:8080/'+ selfCareBox.image" alt="Card image cap">
+                                <div class="card-body">
+                                    <h6 class="card-title"> {{selfCareBox.name}}</h6>
+                                    <p class="card-text">{{selfCareBox.description}}</p>
+                                </div>
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-outline-dark"
+                                            (click)="viewSelfCareBox(selfCareBox.selfCareBoxId)">
+                                        View Artwork Details </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

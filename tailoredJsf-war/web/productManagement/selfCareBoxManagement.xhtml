@@ -1,0 +1,382 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="./../template/masterTemplate.xhtml"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                xmlns:p="http://primefaces.org/ui">
+    
+    <ui:define name="content">
+        <div>
+            <h3>Self Care Box Management</h3>
+            
+            <h:form>
+                <p:menubar>
+                    <p:submenu label="File" icon="ui-icon-document">
+                        <p:menuitem value="Create New Self-care box" onclick="PF('dialogCreateNewSelfCareBox').show()" icon="fa fa-plus"/>
+                    </p:submenu>
+                </p:menubar>
+            </h:form>
+            
+            <h:form id="formAllSelfCareBox">
+
+                <p:messages id="messages" redisplay="false" closable="true" />
+                
+                <p:dataTable id="dataTableAllSelfCareBoxes" widgetVar="dataTableAllSelfCareBoxes" value="#{selfCareBoxManagedBean.selfcareboxes}" var="selfcareboxes" rowKey="#{selfcarebox.getSelfCareBoxId}" rowIndexVar="row"
+                             rows="10" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50">
+
+                    <p:columnGroup type="header">
+                        <p:row>
+<!--                            <p:column rowspan="2" headerText="Self Care Box ID"/>-->
+                            <p:column rowspan="2" headerText="Self Care Box Name"/>
+                            <p:column rowspan="2" headerText="Self Care Box Description"/>
+                            <p:column style="width:20%;" rowspan="2" headerText="Self Care Box Tags"/>
+                            <p:column style="width:25%;" rowspan="2" headerText="Self Care Box Image"/>
+                            <p:column style="width:7%;" rowspan="2" headerText="Price Per Month"/>
+                            <p:column style="width:20%;" colspan="2" headerText="Self Care Box Subscription Discount" />
+                        </p:row>
+                        <p:row>
+<!--                            <p:column headerText="Discount Id" />-->
+                            <p:column style="width:10%;" headerText="Discount Percentage" />
+                            <p:column style="width:15%;" headerText="Discount Duration" />
+                        </p:row>
+                    </p:columnGroup>
+
+                    <p:subTable var="discounts" value="#{selfcareboxes.selfCareSubscriptionDiscounts}">
+<!--                        <p:column>
+                            <h:outputText value="#{selfcareboxes.selfCareBoxId}" />
+                        </p:column>-->
+                        <p:column>
+                            <h:outputText value="#{selfcareboxes.name}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{selfcareboxes.description}" />
+                        </p:column>
+                        <p:column style="width:20%;">
+                            <p:dataList value="#{selfcareboxes.tags}" var="tag" >
+                                #{tag.tagName}
+                            </p:dataList>
+                        </p:column>
+                        <p:column >
+                            <p:graphicImage style= "height: 300px; width: 100%; object-fit: cover;" value="http://localhost:8080/#{selfcareboxes.image}"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{selfcareboxes.pricePerMonth}" />
+                        </p:column>
+<!--                        <p:column>
+                            <h:outputText value="#{discounts.discountId}" />
+                        </p:column>-->
+                        <p:column>
+                            <h:outputText value="#{discounts.discountPercentage}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{discounts.durationEnum}" />
+                        </p:column>
+                        <p:column headerText="Action" >
+                            <p:commandButton actionListener="#{selfCareBoxManagedBean.doUpdateBox}" update="formUpdateSelfCareBox" oncomplete="PF('dialogUpdateBox').show()" icon="pi pi-pencil" title="Update">
+                                <f:attribute name="selfCareBoxToUpdate" value="#{selfcareboxes}" />
+                            </p:commandButton>
+                            <p:commandButton type = "submit" icon="pi pi-trash" actionListener="#{selfCareBoxManagedBean.deleteSelfCareBox}" update="formAllSelfCareBox:dataTableAllSelfCareBoxes formAllSelfCareBox:messages">
+                                <f:attribute name="selfCareBoxToDelete" value="#{selfcareboxes}" />
+                                    <p:confirm header="Confirmation" message="Are you sure you want to delete #{selfcareboxes.name}?" icon="ui-icon-alert" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:subTable>
+                </p:dataTable>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+            </h:form>
+            
+            
+            <h:form id="formUpdateSelfCareBox" enctype="multipart/form-data">
+
+                <p:dialog id="dialogUpdateBox" widgetVar="dialogUpdateBox" header="Update Self Care Box" closable="true">
+
+                    <p:messages id="messagesUpdateSelfCareBox" redisplay="false" />
+                    <p:growl id="msgs" showDetail="true"/>
+
+                    <p:panelGrid>
+
+<!--                        <p:row>
+                            <p:column>
+                                <h:outputLabel value="Self Care Box ID: " />
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{selfCareBoxManagedBean.selectedSelfCareBoxToUpdate.selfCareBoxId}" />
+                            </p:column>
+                            <p:column>
+                                &nbsp;
+                            </p:column>
+                        </p:row>-->
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="name" value="Name: " />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="name" value="#{selfCareBoxManagedBean.selectedSelfCareBoxToUpdate.name}" placeholder="Self Care Box New" required="true" requiredMessage="Name is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="name" />
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="description" value="Description " />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="description" value="#{selfCareBoxManagedBean.selectedSelfCareBoxToUpdate.description}" placeholder="Self Care Box New" required="true" requiredMessage="Description is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="description" />
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="image" value="Image Upload: " style="font-weight: bold;"></p:outputLabel>
+                            </p:column>
+                            <p:column>
+                                <p:fileUpload id="image" value="#{selfCareBoxManagedBean.file}" mode="simple" skinSimple="true"
+                                              dragDropSupport="true" update="msgs" sizeLimit="10000000" fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="selfCareBoxTags" value="Tag(s) " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:selectManyMenu id="selfCareBoxTags" value="#{selfCareBoxManagedBean.selectedTags}" showCheckbox="true">
+                                    <f:selectItems value="#{selfCareBoxManagedBean.tags}" var="tag" itemValue="#{tag.tagId}" itemLabel="#{tag.tagName}" />
+                                </p:selectManyMenu>
+                            </p:column>
+                            <p:column>
+                                <p:message for="selfCareBoxTags" />
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="pricePerMonth" value="Price Per Month " />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="pricePerMonth" value="#{selfCareBoxManagedBean.selectedSelfCareBoxToUpdate.pricePerMonth}" placeholder="30.0" required="true" requiredMessage="Price is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="pricePerMonth" />
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column colspan="2">
+                                <p:dataTable id="dtDiscountPrice" widgetVar="discountPrice" var="discountPrice" value="#{selfCareBoxManagedBean.selectedSelfCareBoxToUpdate.selfCareSubscriptionDiscounts}" editable="true" style="margin-bottom:20px">
+                                    <f:facet name="header">
+                                        Updating subscription discount
+                                    </f:facet>
+
+                                    <p:ajax event="rowEdit" listener="#{selfCareBoxManagedBean.onRowEdit}" update=":formUpdateSelfCareBox:msgs" />
+                                    <p:ajax event="rowEditCancel" listener="#{selfCareBoxManagedBean.onRowCancel}" update=":formUpdateSelfCareBox:msgs" />
+
+
+                                    <p:column headerText="Discount Percentage">
+                                        <p:cellEditor>
+                                            <f:facet name="output"><h:outputText value="#{discountPrice.discountPercentage}" /></f:facet>
+                                            <f:facet name="input"><p:inputText value="#{discountPrice.discountPercentage}" style="width:100%" label="discountPercentage"/></f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+                                    
+                                    <p:column headerText="Duration">
+                                        <h:outputText value ="#{discountPrice.durationEnum}" />
+<!--                                        <p:cellEditor>
+                                            <f:facet name="output"><h:outputText value="#{discountPrice.durationEnum}" /></f:facet>
+                                            <f:facet name="input">
+                                                <h:selectOneMenu value="#{discountPrice.durationEnum}" style="width:100%">
+                                                    <f:selectItems value="#{editSelfCareBoxView.durations}" var="color" itemLabel="#{color}" itemValue="#{color}" />
+                                                </h:selectOneMenu>
+                                            </f:facet>
+                                        </p:cellEditor>-->
+                                    </p:column>
+
+                                    <p:column style="width:32px">
+                                        <p:rowEditor />
+                                    </p:column>
+                                </p:dataTable>
+                            </p:column>
+
+                        </p:row>
+
+                        <p:row>
+                            <p:column colspan="2">
+                                <p:commandButton type="reset" value="Clear" />&nbsp;
+                                <p:commandButton  value="Update New Self Care Box" update="@form formAllSelfCareBox:dataTableAllSelfCareBoxes" actionListener="#{selfCareBoxManagedBean.updateSelfCareBox}" oncomplete="PF('dialogUpdateBox').show();" ajax="false"/>
+                            </p:column>
+                        </p:row>
+
+                    </p:panelGrid>
+
+                </p:dialog>
+
+            </h:form>
+            <h:form id="formCreateNewSelfCareBox" enctype="multipart/form-data">
+
+                <p:dialog id="dialogCreateNewSelfCareBox" widgetVar="dialogCreateNewSelfCareBox" header="Create New Self Care Box" closable="true">
+
+                    <p:messages id="messagesCreateNewSelfCareBox" redisplay="false" />
+                    <p:growl id="msgs" showDetail="true"/>
+                    <p:panelGrid>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="name" value="Name: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="name" value="#{selfCareBoxManagedBean.newSelfCareBox.name}" placeholder="Self Care Box A" required="true" requiredMessage="Name is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="name" />
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="description" value="Description: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="description" value="#{selfCareBoxManagedBean.newSelfCareBox.description}" placeholder="What is this self care box about?" required="true" requiredMessage="Description is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="description" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="image" value="Image Upload: " style="font-weight: bold;"></p:outputLabel>
+                            </p:column>
+                            <p:column>
+                                <p:fileUpload id="image" value="#{selfCareBoxManagedBean.file}" required="true" requiredMessage="Image is required" mode="simple" skinSimple="true"
+                                              dragDropSupport="true" update="msgs" sizeLimit="10000000" fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
+
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="selfCareBoxTags" value="Tag(s) " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:selectManyMenu id="selfCareBoxTags" value="#{selfCareBoxManagedBean.selectedTags}" showCheckbox="true">
+                                    <f:selectItems value="#{selfCareBoxManagedBean.tags}" var="tag" itemValue="#{tag.tagId}" itemLabel="#{tag.tagName}" />
+                                </p:selectManyMenu>
+                            </p:column>
+                            <p:column>
+                                <p:message for="selfCareBoxTags" />
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="pricePerMonth" value="Price/month: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputNumber id="pricePerMonth" value="#{selfCareBoxManagedBean.newSelfCareBox.pricePerMonth}" placeholder="0.00" symbol="S$ " required="true" requiredMessage="Price is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="pricePerMonth" />
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column colspan="2">
+                                <h1>Self Care Box Subscription Discounts</h1>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="durationOneTime" value="One Time: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputNumber id="durationOneTime" value="#{selfCareBoxManagedBean.newDiscountOneTime}" placeholder="0" symbol="% " decimalPlaces="0" required="true" requiredMessage="Please enter a percentage" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="durationOneTime" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="durationThreeMonth" value="Three Months: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputNumber id="durationThreeMonth" value="#{selfCareBoxManagedBean.newDiscountThreeMonth}" placeholder="0" symbol="% " decimalPlaces="0" required="true" requiredMessage="Please enter a percentage" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="durationThreeMonth" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="durationSixMonth" value="Six Months: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputNumber id="durationSixMonth" value="#{selfCareBoxManagedBean.newDiscountSixMonth}" placeholder="0" symbol="% " decimalPlaces="0" required="true" requiredMessage="Please enter a percentage" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="durationSixMonth" />
+                            </p:column>
+                        </p:row>
+<!--                        <p:row>
+                            <p:column colspan="2">
+                                <p:dataTable id="dtSelfCareSubscriptionDiscount" widgetVar="selfCareSubscriptionDiscount" var="selfCareSubscriptionDiscount" value="#{addSelfCareSubscriptionDiscountRowView.selfCareSubscriptionDiscounts}" editable="true" style="margin-bottom:20px">
+                                    <f:facet name="header">
+                                        Row Editing with add functionality
+                                    </f:facet>
+
+                                    <p:ajax event="rowEdit" listener="#{addSelfCareSubscriptionDiscountRowView.onRowEdit}" update=":formCreateNewSelfCareBox:msgs" />
+                                    <p:ajax event="rowEditCancel" listener="#{addSelfCareSubscriptionDiscountRowView.onRowCancel}" update=":formCreateNewSelfCareBox:msgs" />
+
+
+                                    <p:column headerText="Price">
+                                        <p:cellEditor>
+                                            <f:facet name="output"><h:outputText value="#{selfCareSubscriptionDiscount.discountPercentage}" /></f:facet>
+                                            <f:facet name="input"><p:inputText value="#{selfCareSubscriptionDiscount.discountPercentage}" style="width:100%" label="Price"/></f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+
+                                    <p:column headerText="Format">
+                                        <p:cellEditor>
+                                            <f:facet name="output"><h:outputText value="#{selfCareSubscriptionDiscount.durationEnum}" /></f:facet>
+                                            <f:facet name="input">
+                                                <h:selectOneMenu value="#{selfCareSubscriptionDiscount.durationEnum}" style="width:100%">
+                                                    <f:selectItems value="#{editSelfCareBoxView.durations}" var="color" itemLabel="#{color}" itemValue="#{color}" />
+                                                </h:selectOneMenu>
+                                            </f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+
+                                    <p:column style="width:32px">
+                                        <p:rowEditor />
+                                    </p:column>
+                                </p:dataTable>
+                            </p:column>
+
+                        </p:row>-->
+
+                        <p:row>
+                            <p:column colspan="2">
+                                <p:commandButton type="reset" value="Clear" />&nbsp;
+                                <p:commandButton  value="Create New Self Care Box" update="@form formAllSelfCareBox:dataTableAllSelfCareBoxes" actionListener="#{selfCareBoxManagedBean.createNewSelfCareBox}" oncomplete="PF('dialogCreateNewSelfCareBox').show();" ajax="false"/>
+                            </p:column>
+                        </p:row>
+
+                    </p:panelGrid>
+
+                </p:dialog>
+
+            </h:form>
+            
+        </div>
+    </ui:define>
+</ui:composition>

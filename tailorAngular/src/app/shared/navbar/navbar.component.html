@@ -1,0 +1,150 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <div class="navbar-translate">
+            <a class="navbar-brand" [routerLink]="['/index']" placement="bottom">
+                TAILOR(ED)
+            </a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/pages/storyboard']">
+                        <p>Storyboard</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/pages/shopArtwork']">
+                        <p>Shop Artworks</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/pages/shopSelfCareBoxes']">
+                        <p>Shop Self-care Boxes</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/pages/shoppingCart']">
+                        <p>Shopping Cart</p>
+                    </a>
+                </li>
+                <li class="nav-item" *ngIf="username == null">
+                    <a class="nav-link" [routerLink]="['/pages/registerCustomer']">
+                        <p>Login</p>
+                    </a>
+                </li>
+                <li class="nav-item" ngbDropdown display="dynamic" *ngIf="username">
+                    <a class="nav-link" style="cursor: pointer" ngbDropdownToggle id="navbarDropdown3" role="button">
+                        Welcome! {{username}}
+                    </a>
+                    <div ngbDropdownMenu aria-labelledby="navbarDropdown3" class="dropdown-menu">
+                        <button ngbDropdownItem (click)="open(content)"> Update Profile </button>
+                        <button ngbDropdownItem (click)="open(contentUpdate)"> Update Preferences </button>
+                        <form (ngSubmit)="deleteCustomer()">
+                            <button ngbDropdownItem type="submit"> Delete Account </button>
+                        </form>
+                        <a class="dropdown-item" [routerLink]="['pages/viewAllMyPosts']">Manage Posts</a>
+                        <a class="dropdown-item" [routerLink]="['pages/viewAllMyOrders']">View My Orders</a>
+                    </div>
+                </li>
+                <li class="nav-item" *ngIf="username">
+                    <form (ngSubmit)="logoutCustomer()">
+                        <button type="submit" class="btn btn-light" >Logout</button>
+                    </form>
+                </li>
+                <li class="nav-item">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#modalLoginForm" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<ng-template #contentUpdate let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title"> Update Preferences </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form #updatePreferencesForm="ngForm" (ngSubmit)="updateCustomerPreferences(updatePreferencesForm)" class="form-horizontal" role="form">
+            <div class="form-group">
+                <label class="col-sm-3 control-label"> Preferences </label>
+            </div>
+            <div class="form-group" *ngFor="let tag of tags; index as i">
+                <input id="tag{{i}}" name = "tag{{i}}" type="checkbox" [(ngModel)]="selectedTags[i]"/>
+                <label for="tag{{i}}">{{tag.tagName}}</label>
+            </div>
+            <button type="submit" class="btn btn-outline-dark"> Submit </button>
+        </form>
+    </div>
+</ng-template>
+
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title"> Update user profile </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form #updateCustomerForm="ngForm" (ngSubmit)="updateCustomer(updateCustomerForm)" class="form-horizontal" role="form">
+            <div class="form-group">
+                <label for="firstName" class="col-sm-3 control-label">First Name* </label>
+                <div class="col-sm-9">
+                    <input id="firstName" name="firstName" #firstName="ngModel" type="text" placeholder="{{customer.firstName}}" [(ngModel)]="customerToUpdate.firstName" class="form-control" required="true">
+                </div>
+                <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched || submitted)" style="color: red;">
+                    <div *ngIf="firstName.errors.required">
+                        First Name is required
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="lastName" class="col-sm-3 control-label">Last Name* </label>
+                <div class="col-sm-9">
+                    <input id="lastName" name="lastName" #lastName="ngModel" type="text" placeholder="{{customer.lastName}}" [(ngModel)]="customerToUpdate.lastName" class="form-control" required="true">
+                </div>
+                <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched || submitted)" style="color: red;">
+                    <div *ngIf="lastName.errors.required">
+                        Last Name is required
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="email" class="col-sm-3 control-label">Email* </label>
+                <div class="col-sm-9">
+                    <input id="email" name="email" #email="ngModel" type="text" placeholder="{{customer.email}}" [(ngModel)]="customerToUpdate.email" class="form-control" required="true">
+                </div>
+                <div *ngIf="email.invalid && (email.dirty || email.touched || submitted)" style="color: red;">
+                    <div *ngIf="email.errors.required">
+                        Email is required
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="shippingAddress" class="col-sm-3 control-label">Shipping Address </label>
+                <div class="col-sm-9">
+                    <input id="shippingAddress" name="shippingAddress" #shippingAddress="ngModel" type="text" placeholder="{{customer.shippingAddress}}" [(ngModel)]="customerToUpdate.shippingAddress" class="form-control" required="false">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="shippingPostalCode" class="col-sm-3 control-label">Shipping Postal Code </label>
+                <div class="col-sm-9">
+                    <input id="shippingPostalCode" name="shippingPostalCode" #shippingPostalCode="ngModel" type="text" placeholder="{{customer.shippingPostalCode}}" [(ngModel)]="customerToUpdate.shippingPostalCode" class="form-control" required="false">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="shippingUnitNum" class="col-sm-3 control-label">Shipping Unit Number </label>
+                <div class="col-sm-9">
+                    <input id="shippingUnitNum" name="shippingUnitNum" #shippingUnitNum="ngModel" type="text" placeholder="{{customer.shippingUnitNum}}" [(ngModel)]="customerToUpdate.shippingUnitNum" class="form-control" required="false">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-outline-dark"> Submit </button>
+        </form>
+    </div>
+</ng-template>

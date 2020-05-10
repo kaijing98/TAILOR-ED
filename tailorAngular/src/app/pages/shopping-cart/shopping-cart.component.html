@@ -1,0 +1,109 @@
+<div class="container">
+<form>
+    <div class="form-group">
+      <br>
+    <h1>Shopping Cart</h1>
+    <hr>
+        <p *ngFor="let alert of alerts">
+            <ngb-alert [type]="alert.type" (close)="close(alert)">{{ alert.message }}</ngb-alert>
+            <a class="btn btn-outline-info" routerLink="/pages/viewAllMyOrders">View Your Orders</a>
+        </p>
+    <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col" class="border-0 bg-light">
+                <div class="p-2 px-3 text-uppercase">Item</div>
+              </th>
+              <th scope="col" class="border-0 bg-light">
+                <div class="py-2 text-uppercase">Total Price Per Item</div>
+              </th>
+              <th scope="col" class="border-0 bg-light">
+                <div class="py-2 text-uppercase">Quantity</div>
+              </th>
+              <th scope="col" class="border-0 bg-light">
+<!--                <div class="py-2 text-uppercase">Remove</div>-->
+              </th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let shoppingCartItem of shoppingCart; let i = index">
+            <tr>
+              <th scope="row" class="border-0">
+                <div class="p-2">
+                  <img [src]="'http://localhost:8080/'+ shoppingCartItem.productImage" width="70"/>
+                  <div class="ml-3 d-inline-block align-middle">
+                    <h5 class="mb-0"> <a href="#" class="text-dark d-inline-block align-middle">{{
+                        shoppingCartItem.productName}}</a></h5><span class="text-muted font-weight-normal font-italic d-block">Category: {{shoppingCartItem.productType}}</span>
+                  </div>
+                </div>
+              </th>
+              <td class="border-0 align-middle"><strong>{{shoppingCartItem.productPrice}}</strong></td>
+              <td class="border-0 align-middle"><strong>
+                <div class="quantity">
+                <input type="number" min="1" max="9" step="1" onkeydown="return false" id = {{i}} value={{shoppingCartItem.productQuantity}}
+                (change)="quantityOnChange(i)"
+                />
+                </div>
+              </strong></td>
+              <td class="border-0 align-middle"><button class="text-dark" (click)="removeShoppingCartItem(shoppingCartItem)" ><i class="fa fa-trash"></i></button></td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+    <div class="row py-5 p-4 bg-white rounded shadow-sm">
+        <div class="col-lg-12">
+          <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Order summary </div>
+          <div class="p-4">
+            <p class="font-italic mb-4">Shipping and additional costs are calculated based on values you have entered.</p>
+            <ul class="list-unstyled mb-4">
+              <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Order Subtotal </strong><strong>SG${{subtotalAmt}}</strong></li>
+              
+              <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Shipping and handling</strong><strong>SG${{ShippingAndHandling.toFixed(2)}}</strong></li>
+              
+              <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Tax</strong><strong>SG${{tax | number}}</strong></li>
+              
+              <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Total</strong>
+                <h5 class="font-weight-bold">SG${{totalAmt.toFixed(2)}}</h5>
+              </li>
+            </ul>
+            <div class="row">
+            <div class="col-sm-4">
+              <button type="button" class="btn btn-outline-dark" (click)="checkout(content)">Proceed to checkout</button>
+            </div>
+            <div class="col-sm-4">
+              <button type="button" class="btn btn-outline-success" [routerLink]="['/pages/shopArtwork']">Buy more artwork</button>
+            </div>
+            <div class="col-sm-4">
+              <button type="button" class="btn btn-outline-info" [routerLink]="['/pages/shopSelfCareBoxes']">Buy more self-care box</button>
+            </div>  
+          </div>
+            <br>
+            <br>
+<!--            <button type="button" class="btn btn-outline-dark" (click)="redirectToViewOrders()">View Orders</button>-->
+          </div>
+        </div>
+      </div>              
+    </div>
+  </form>
+
+  <ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Not Logined</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="form-group">
+          <label>Please login before checking out</label>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="redirectToRegister()">Login</button>
+    </div>
+  </ng-template>
+  
+  
+</div>

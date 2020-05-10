@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/template/masterTemplate.xhtml"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                xmlns:p="http://primefaces.org/ui">
+    
+    <ui:define name="content">
+        
+        
+        <h:panelGroup rendered="#{sessionScope.loginUser == null}">
+            <article>
+                <h3>Welcome to TAILOR(ED)</h3>
+                <p>
+                    A platform where individuals and companies can list self-care boxes and artworks themed around mental health and wellness.         
+                </p>
+                <p>
+                    Not registered as a seller on our platform yet?          
+                </p>
+                <p>
+                    Sign up at no additional cost!          
+                </p>
+                <p:commandButton value="Sign up" icon="fa fa-user-plus" onclick="PF('dialogCreateNewSeller').show()"/>
+            </article>
+            
+            <h:form>  
+                
+                <p:dialog id="dialogCreateNewSeller" header="Sign Up As A seller" widgetVar="dialogCreateNewSeller" closable="true">
+                    <p:messages id="messagesCreateNewSeller" redisplay="false" />
+                    <p:growl id="msgs" showDetail="true"/>
+                
+                    <p:panelGrid columns="2">
+                        <p:outputLabel for="username" value="Username:" />
+                        <p:inputText id="username" value="#{sellerJSFManagedBean.newSeller.username}" required="true" requiredMessage="Username is required" />
+                        
+                        <p:outputLabel for="password" value="Password:" />
+                        <p:password id="password" value="#{sellerJSFManagedBean.newSeller.password}" required="true" requiredMessage="Password is required" />
+                        
+                        <p:outputLabel for="firstName" value="First Name:" />
+                        <p:inputText id="firstName" value="#{sellerJSFManagedBean.newSeller.firstName}" required="true" requiredMessage="First Name is required" />
+                        
+                        <p:outputLabel for="lastName" value="Last Name:" />
+                        <p:inputText id="lastName" value="#{sellerJSFManagedBean.newSeller.lastName}" required="true" requiredMessage="Last Name is required" />
+                        
+                        <p:outputLabel for="email" value="Email:" />
+                        <p:inputText id="email" value="#{sellerJSFManagedBean.newSeller.email}" required="true" requiredMessage="Email is required" />
+             
+                        <f:facet name="footer">
+                            <p:commandButton type="reset" value="Clear" />&nbsp;
+                            <p:commandButton value=" Sign Up " actionListener="#{sellerJSFManagedBean.createNewSeller}" oncomplete="PF('dialogCreateNewSeller').show();"/>
+                        </f:facet>  
+                    </p:panelGrid>
+                    
+                </p:dialog>    
+            </h:form>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{sessionScope.isLogin == true}">
+            <article>
+                <h3>You have login</h3>                    
+                <p>                    
+                    Welcome to TAILOR(ED)! Explore the functionalities in the menu now!
+                </p>
+            </article>
+        </h:panelGroup>
+        
+        <h:panelGroup rendered="#{adminLoginJSFManagedBean.sessionClass eq 'Seller'}">
+            <p:commandButton value="Update Your Profile" onclick="PF('dialogUpdateSeller').show()" icon="fa fa-pencil" />
+            <p:commandButton type = "submit" value="Delete Your Account" icon="pi pi-trash" actionListener="#{sellerJSFManagedBean.deleteSeller}" >
+                <p:confirm header="Confirmation" message="Are you sure you want to delete your account?" icon="ui-icon-alert" />
+            </p:commandButton>
+            
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
+        </h:panelGroup>
+        
+        <h:form id="formUpdateSeller">
+
+            <p:dialog id="dialogUpdateSeller" widgetVar="dialogUpdateSeller" header="Update Your Profile" closable="true">
+
+                <p:messages id="messagesUpdateSeller" redisplay="false" />
+                <p:growl id="msgs" showDetail="true"/>
+
+                <p:panelGrid>
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Seller ID: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{sellerJSFManagedBean.currentSeller.userId}" />
+                        </p:column>
+                        <p:column>
+                            &nbsp;
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="firstName" value="First Name: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="firstName" value="#{sellerJSFManagedBean.currentSeller.firstName}" placeholder="Enter First Name" required="true" requiredMessage="Name is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="firstName" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="lastName" value="Last Name: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="lastName" value="#{sellerJSFManagedBean.currentSeller.lastName}" placeholder="Enter Last Name" required="true" requiredMessage="Name is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="lastName" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="email" value="Email: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="email" value="#{sellerJSFManagedBean.currentSeller.email}" placeholder="Enter Email" required="true" requiredMessage="Email is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="email" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column colspan="2">
+                            <p:commandButton type="reset" value="Clear" />&nbsp;
+                            <p:commandButton  value="Update Your Profile" actionListener="#{sellerJSFManagedBean.updateProfile}" oncomplete="PF('dialogUpdateSeller').show();" />
+                        </p:column>
+                    </p:row>
+                    
+
+
+                </p:panelGrid>
+
+            </p:dialog>
+
+        </h:form>
+        
+    </ui:define>
+
+</ui:composition>

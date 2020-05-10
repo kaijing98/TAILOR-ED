@@ -1,0 +1,68 @@
+<div class="wrapper">
+    <div class="artworkheader-bg">
+        <div class="container">
+            <div class="content-center">
+                <h3 class="text-center">Artwork Board</h3>
+                <h5 class="text-center">In this space, we story-tell, empathize, bond and heal through Art.</h5>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="row">
+            <div class="col-3">
+                <div class="list-group">
+                    <a class="list-group-item list-group-item-secondary">Filter Artworks</a>
+                    <a *ngFor="let t of tags" routerLink="/pages/filterArtwork/{{t.tagId}}"
+                        class="list-group-item list-group-item-action">{{t.tagName}}</a>
+                </div>
+            </div>
+            <div class="col">
+                <form>
+                    <div class="row card-group" style="padding-right: 2%">
+                        <div class="col-4" *ngFor="let artwork of artworks" style="padding-bottom: 3%">
+                            <div class="card" style="width: 100%;height: 100%">
+                                <img class="card-img-top" [src]="'http://localhost:8080/'+ artwork.image" alt="Card image cap">
+                                <div class="card-body">
+                                    <h6 class="card-title"> {{artwork.name}}</h6>
+                                    <p class="card-text">{{artwork.description}}</p>
+                                </div>
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-outline-dark"
+                                            (click)="viewArtwork(artwork.artworkId)">
+                                        View Artwork Details </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+<!--                    <table class="table table-hover">-->
+<!--                        <thead>-->
+<!--                            <th scope="col">Image</th>-->
+<!--                            <th scope="col">Name</th>-->
+<!--                            <th scope="col">Description</th>-->
+<!--                            <th scope="col">View details of artwork</th>-->
+<!--                        </thead>-->
+<!--                        <tbody>-->
+<!--                            <tr *ngFor="let artwork of artworks">-->
+<!--                                <td>-->
+<!--                                    <img style="width:100px;height:60px;"-->
+<!--                                        [src]="'http://localhost:8080/'+ artwork.image" />-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <ngb-highlight [result]="artwork.name"></ngb-highlight>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <ngb-highlight [result]="artwork.description"></ngb-highlight>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <button type="submit" class="btn btn-outline-dark"-->
+<!--                                        (click)="viewArtwork(artwork.artworkId)">-->
+<!--                                        View Artwork Details </button>-->
+<!--                                </td>-->
+<!--                            </tr>-->
+<!--                        </tbody>-->
+<!--                    </table>-->
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

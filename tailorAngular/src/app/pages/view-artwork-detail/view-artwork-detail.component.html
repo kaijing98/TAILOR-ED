@@ -1,0 +1,122 @@
+<div class="container">
+    <br>
+
+    <hr>
+
+    <ng-template #content let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">User Reported</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form>
+                <div *ngIf="reportSuccess" class="form-group">
+                    <label>You have reported the user.</label>
+                </div>
+                <div *ngIf="userIsBanned && !reportSuccess" class="form-group">
+                    <label>Unable to report user, user is already banned. </label>
+                </div>
+                <div *ngIf="!reportSuccess && !userIsBanned" class="form-group">
+                    <label>Unable to report user, you have already reported this user for the same offence.</label>
+                </div>
+            </form>
+        </div>
+    </ng-template>
+
+
+    <div class="card">
+        <div class="row">
+            <aside class="col-sm-5 border-right">
+                <article class="gallery-wrap">
+                    <div class="img-big-wrap">
+                        <img [src]="'http://localhost:8080/'+ artworkToView.image"
+                             class="img-fluid" />
+                    </div> <!-- slider-product.// -->
+                </article> <!-- gallery-wrap .end// -->
+            </aside>
+            <aside class="col-sm-7">
+                <article class="card-body p-5">
+                    <h3 class="title mb-3">{{artworkToView.name}}</h3>
+
+                    <dl class="item-property">
+                        <dt>Description</dt>
+                        <dd>
+                            <p>{{artworkToView.description}}</p>
+                        </dd>
+                    </dl>
+
+                    <dl class="item-property">
+                        <dt>Seller</dt>
+                        <dd>
+                            <p>{{artworkToView.seller.username}}</p>
+                        </dd>
+                    </dl>
+
+                    <dl *ngIf="sellerIsVerified" class="item-property">
+                        <dt>Verified Seller</dt>
+                        <dd>
+                            <p>Yes, we have verified this seller</p>
+                        </dd>
+                    </dl>
+
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-7">
+                            <dl class="param param-inline">
+                                <dt>Format Type: </dt>
+                                <dd>
+                        
+                                    <select class="form-control form-control-sm" style="width:auto;" 
+                                    id="artworkFormat" [(ngModel)]="selectedPrice"
+                                    >
+                                        <option id="priceId" *ngFor="let artworkPrice of artworkPrices"
+                                        value="{{artworkPrice.price}}"
+                                        >{{artworkPrice.formatEnumStr}}</option>
+                                    </select>
+                            
+                                </dd>
+                            </dl> <!-- item-property .// -->
+                        </div> <!-- col.// -->
+                        <div class="col-sm-5">
+                            <dl class="param param-inline">
+                                <dd>
+                                    <label name="artworkFormat">
+                                        <h3>SG${{selectedPrice}}</h3></label>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div> <!-- row.// -->
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-7">
+                        <dt>Quantity: </dt>
+                        <input type="range" min="1" max="10" step="1" value="1" [(ngModel)]="selectedQuantity"/>
+                        </div>
+                        <div class="col-sm-5">
+                            <label name="quantity">
+                                <h3>{{selectedQuantity}}</h3>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    <button class="btn btn-md btn-outline-primary" (click)="addToCart()">Add to cart</button>
+                    <br>
+                    
+                    <br>
+                    <div ngbDropdown class="d-inline-block">
+                        <button class="btn btn-outline-danger" id="dropdownBasic1" ngbDropdownToggle>Report User</button>
+                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                            <button ngbDropdownItem *ngFor="let o of offences"
+                                (click)="reportUser(artworkToView.seller.userId, o.offencesId, content)">{{o.name}}</button>
+                        </div>
+                    </div>
+                </article> <!-- card-body.// -->
+            </aside> <!-- col.// -->
+        </div> <!-- row.// -->
+    </div> <!-- card.// -->
+
+</div>
+<!--container.//-->

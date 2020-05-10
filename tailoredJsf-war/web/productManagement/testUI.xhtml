@@ -1,0 +1,282 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="./../template/masterTemplate.xhtml"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+
+        <h:form id="testForm">
+
+            <p:column headerText="Price">
+                <p:inputNumber id="inputPrice" value="#{artworkPrice.price}" style="width:100%"></p:inputNumber>
+            </p:column>
+            <p:column headerText="Image">
+                <p:inputText id="inputImage" value="#{artworkPrice.image}" style="width:100%"></p:inputText>                           
+            </p:column>
+
+            <p:selectOneMenu id="console" value="#{artworkJSFManagedBean.formatEnum}" >
+                <f:selectItems value="#{data.getFormats()}" />
+            </p:selectOneMenu>
+
+            <p:column style="width:32px">
+                <p:commandButton value="Remove row"></p:commandButton>
+            </p:column>
+        </h:form>
+        
+        <h:form id="formAllArtworks">
+                        <p:dataTable id="dataTableAllArtworks" widgetVar="dataTableAllArtworks" value="#{artworkJSFManagedBean.artworks}" var="artworks" rowKey="#{artwork.getArtworkId}" rowIndexVar="row" >
+                    <p:column headerText="Artwork Id" groupRow="true">
+                        <h:outputText value="#{artworks.artworkId}" />
+                    </p:column>
+                    <p:column headerText="Artwork Name" groupRow="true">
+                        <h:outputText value="#{artworks.name}" />
+                    </p:column>
+                    <p:column headerText="Artwork Description" groupRow="true">
+                        <h:outputText value="#{artworks.description}" />
+                    </p:column>
+                    <p:column headerText="Artwork Price">
+                        <h:outputText value="#{artworks.artworkPrices}" />
+                    </p:column>
+    </p:dataTable>
+            </h:form>
+
+        <h:form enctype="multipart/form-data">
+            <p:fileUpload value="#{fileUploadManagedBean.file}" mode="advanced" fileUploadListener="#{fileUploadManagedBean.fileUploadListener}"
+                          dragDropSupport="true" update="msgs" sizeLimit="10000000" fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
+            <p:growl id="msgs" showDetail="true"/>
+        </h:form>
+        <!--
+        <h:form id="form">
+    
+ <p:growl id="msgs" showDetail="true"/>
+    <p:dataTable id="dtArtworkPrice" widgetVar="artworkPrice1" var="artworkPrice" value="#{dtAddRowView.cars1}" editable="true" style="margin-bottom:20px">
+        <f:facet name="header">
+            Row Editing with add functionality
+        </f:facet>
+ 
+        <p:ajax event="rowEdit" listener="#{dtAddRowView.onRowEdit}" update=":form:msgs" />
+        <p:ajax event="rowEditCancel" listener="#{dtAddRowView.onRowCancel}" update=":form:msgs" />
+ 
+        <p:column headerText="Id">
+            <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{car.id}" /></f:facet>
+                <f:facet name="input"><p:inputText id="modelInput" value="#{car.id}" style="width:100%"/></f:facet>
+            </p:cellEditor>
+        </p:column>
+ 
+        <p:column headerText="Year">
+            <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{car.year}" /></f:facet>
+                <f:facet name="input"><p:inputText value="#{car.year}" style="width:100%" label="Year"/></f:facet>
+            </p:cellEditor>
+        </p:column>
+ 
+        <p:column headerText="Brand">
+            <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{car.brand}" /></f:facet>
+                <f:facet name="input">
+                    <h:selectOneMenu value="#{car.brand}" style="width:100%">
+                        <f:selectItems value="#{dtEditView.brands}" var="man" itemLabel="#{man}" itemValue="#{man}" />
+                    </h:selectOneMenu>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+ 
+        <p:column headerText="Color">
+            <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{car.color}" /></f:facet>
+                <f:facet name="input">
+                    <h:selectOneMenu value="#{car.color}" style="width:100%">
+                        <f:selectItems value="#{dtEditView.colors}" var="color" itemLabel="#{color}" itemValue="#{color}" />
+                    </h:selectOneMenu>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+ 
+        <p:column style="width:32px">
+            <p:rowEditor />
+        </p:column>
+    </p:dataTable>
+ 
+     <div class="ui-g">
+         <div class="ui-g-12">
+             <p:commandButton value="Add new row" styleClass="ui-priority-primary" process="@this" update=":form:msgs"
+                              action="#{dtAddRowView.onAddNew()}" oncomplete="PF('cars1').addRow();"/>
+         </div>
+     </div>
+ 
+ </h:form>ƒ
+        -->
+
+        <h:form id="formCreateNewArtwork" enctype="multipart/form-data">
+
+         
+
+                <p:messages id="messagesCreateNewArtwork" redisplay="false" />
+
+                <p:panelGrid>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="name" value="Name: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="name" value="#{artworkJSFManagedBean.newArtwork.name}" placeholder="Artwork A" required="true" requiredMessage="Name is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="name" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="description" value="Description " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="description" value="#{artworkJSFManagedBean.newArtwork.description}" placeholder="What is this artwork about?" required="true" requiredMessage="Description is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="description" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="image" value="Image Upload: " style="font-weight: bold;"></p:outputLabel>
+                        </p:column>
+                        <p:column>
+                            <p:fileUpload id="image" value="#{fileUploadManagedBean.file}" mode="advanced" fileUploadListener="#{fileUploadManagedBean.fileUploadListener}"
+                                          dragDropSupport="true" update="msgsImage" sizeLimit="10000000" fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
+                            <p:growl id="msgsImage" showDetail="true"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="artworkTags" value="Tag(s) " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:selectManyMenu id="artworkTags" value="#{artworkJSFManagedBean.selectedTags}" showCheckbox="true">
+                                <f:selectItems value="#{artworkJSFManagedBean.tags}" var="tag" itemValue="#{tag.tagId}" itemLabel="#{tag.tagName}" />
+                            </p:selectManyMenu>
+                        </p:column>
+                        <p:column>
+                            <p:message for="artworkTags" />
+                        </p:column>
+                    </p:row> 
+                    
+                    <p:growl id="msgs" showDetail="true"/>
+
+                    <p:dataTable id="artworkPriceDataTable" widgetVar="artworkPrices" var="artworkPrice" value="#{addArtworkPriceRowView.artworkPrices}" editable="true" style="margin-bottom:20px">
+                        <f:facet name="header">
+                            Add Artwork Price
+                        </f:facet>
+
+                       
+
+                        <p:column headerText="Price">
+                            <p:inputNumber id="inputPrice" value="#{artworkPrice.price}" style="width:100%"></p:inputNumber>
+                        </p:column>
+
+                        <p:column headerText="Format">
+                            
+                        </p:column>
+
+                        <p:column style="width:32px">
+                            <p:commandButton value="Remove row"></p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:commandButton value="Add new row" styleClass="ui-priority-primary" process="@this"
+                                             action="#{addArtworkPriceRowView.onAddNew()}" update="artworkPriceDataTable" oncomplete="PF('artworkPriceDataTable').addRow();"/>
+                        </div>
+                    </div>
+
+                    <p:row>
+                        <p:column colspan="3">
+                            <p:commandButton type="reset" value="Clear" />&nbsp;
+                            <p:commandButton  value="Create New Artwork"  actionListener="#{artworkJSFManagedBean.createNewArtwork}" oncomplete="PF('dialogCreateNewArtwork').show();" />
+                        </p:column>
+                    </p:row>
+
+                </p:panelGrid>
+        </h:form>
+        
+        <h:form id="formAllTags">
+            
+            <p:messages id="messages" redisplay="false" closable="true" />
+
+            <p:dataTable id="dataTableAllTags" widgetVar="dataTableAllTags" value="#{tagJSFManagedBean.tags}" var="tag" rowKey="#{tag.tagId}" rowIndexVar="row"
+                         rows="10" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50">
+
+                <p:column headerText="Tag ID" groupRow="true">
+                    <h:outputText value="#{tag.tagId}" />
+                </p:column>                            
+
+                <p:column headerText="Name" groupRow="true">
+                    <h:outputText value="#{tag.tagName}" />
+                </p:column>
+
+                <p:column headerText="Deleted" groupRow="true">
+                    <h:outputText value="#{tag.isDeleted}" />
+                </p:column>
+                <p:column headerText="Action" >
+                            <p:commandButton actionListener="#{tagJSFManagedBean.doUpdateTag}" update="formUpdateTag" oncomplete="PF('dialogUpdateTag').show()" icon="pi pi-pencil" title="Update">
+                                <f:attribute name="tagToUpdate" value="#{tags}" />
+                            </p:commandButton>
+                            <p:commandButton type = "submit" icon="pi pi-trash" actionListener="#{tagJSFManagedBean.deleteTag}" update="formAllTags:dataTableAllTags formAllTags:messages">
+                                <f:attribute name="tagToDelete" value="#{tags}" />
+                                    <p:confirm header="Confirmation" message="Are you sure you want to delete #{tags.name}?" icon="ui-icon-alert" />
+                            </p:commandButton>
+                </p:column>
+
+            </p:dataTable>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
+
+        </h:form>
+
+        <h:form id="formCreateNewTag" enctype="multipart/form-data">
+
+            <p:dialog id="dialogCreateNewTag" widgetVar="dialogCreateNewTag" header="Create New Tag" closable="true">
+
+                <p:messages id="messagesCreateNewTag" redisplay="false" />
+                <p:growl id="msgs" showDetail="true"/>
+
+                <p:panelGrid>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="name" value="Name: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="name" value="#{tagJSFManagedBean.newTag.tagName}" placeholder="Enter tag name" required="true" requiredMessage="Name is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="name" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column colspan="3">
+                            <p:commandButton type="reset" value="Clear" />&nbsp;
+                            <p:commandButton  value="Create New Tag" update="@form formAllTags:dataTableAllTags" actionListener="#{tagJSFManagedBean.createNewTag}" oncomplete="PF('dialogCreateNewTag').show();" />
+                        </p:column>
+                    </p:row>
+
+                </p:panelGrid>
+
+            </p:dialog>
+
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

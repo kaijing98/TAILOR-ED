@@ -1,0 +1,36 @@
+<div class="container">
+    <div class="artworkheader-bg">
+        <div class="container">
+            <div class="content-center">
+                <h5 class="text-center"></h5>
+                <h2 class="text-center">Manage My Posts</h2>
+                <h5 class="text-center"></h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-3">
+            <div class="list-group">
+                <a routerLink="/pages/createPost" class="list-group-item">Create new Post</a>
+            </div>
+        </div>
+        <div class="col">
+            <div *ngFor="let p of myPosts" class="jumbotron" style="padding: 3%">
+                <h2 class="display-5">{{p.topic}}</h2>
+                <hr class="my-4" />
+<!--                <img src="assets/img/anxiouspost.png" alt="Italian Trulli" width="400" height="273" align="middle">-->
+                <!-- <img class="forum-img-top" [src]="p.image + alt="Cannot display image at this moment need to fix it later"> -->
+                <p class="lead">{{p.content}}</p>
+                <h6 class="time">posted on: {{p.dateTime}}</h6>
+                <a class="btn btn-outline-info" routerLink="/pages/updatePost/{{p.postId}}">Update</a>
+                <h6></h6>
+                <a class="btn btn-outline-info" routerLink="/pages/deletePost/{{p.postId}}">Delete</a>
+                <!-- <button type="submit" class="btn btn-warning btn-lg" (click)="open(contentUpdate)">Update</button>
+                <h6></h6>
+                <button type="submit" class="btn btn-danger btn-lg" (click)="deletePost(p.postId)">Delete</button> --> 
+            </div>
+        </div>
+    </div>
+</div>
+

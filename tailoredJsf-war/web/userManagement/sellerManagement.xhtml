@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="./../template/masterTemplate.xhtml"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <div>
+            <h3>Seller Management</h3>
+            
+            <style type="text/css">
+                .ui-row-editor .ui-row-editor-pencil {
+                    margin-left:8px;
+                }
+            </style>
+            
+            <h:form id="formAllSellers">
+            
+            <p:messages id="messages" redisplay="false" closable="true" />
+
+            <p:dataTable id="dataTableAllSellers" widgetVar="dataTableAllSellers" value="#{sellerManagementManagedBean.sellers}" var="seller" rowKey="#{seller.userId}" rowIndexVar="row"
+                         rows="10" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50">
+
+                <p:column headerText="Seller ID" groupRow="true">
+                    <h:outputText value="#{seller.userId}" />
+                </p:column>
+                
+                <p:column headerText="Seller Username" groupRow="true" width="70">
+                    <h:outputText value="#{seller.username}" />
+                </p:column>
+
+                <p:column headerText="First Name" groupRow="false">
+                    <h:outputText value="#{seller.firstName}" />
+                </p:column>
+
+                <p:column headerText="Last Name" groupRow="false">
+                    <h:outputText value="#{seller.lastName}" />
+                </p:column>
+                
+                <p:column headerText="Email" groupRow="true" width="150">
+                    <h:outputText value="#{seller.email}" />
+                </p:column>
+                
+                <p:column headerText="Verified" groupRow="true">
+                    <h:outputText value="#{seller.isVerified}" />
+                </p:column>
+                
+                <p:column headerText="Banned" groupRow="true">
+                    <h:outputText value="#{seller.isBanned}" />
+                </p:column>
+                
+                <p:column headerText="Deleted" groupRow="true">
+                    <h:outputText value="#{seller.isDeleted}" />
+                </p:column>
+                
+                <p:column headerText="Aprroval" >
+                            <p:commandButton type = "submit" icon="pi pi-check-circle" actionListener="#{sellerManagementManagedBean.approveSeller}" update="formAllSellers:dataTableAllSellers formAllSellers:messages">
+                                <f:attribute name="sellerToApprove" value="#{seller}" />
+                                    <p:confirm header="Confirmation" message="Are you sure you want to approve #{seller.firstName}?" icon="ui-icon-alert" />
+                            </p:commandButton>
+                </p:column>
+
+            </p:dataTable>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
+
+        </h:form>
+
+        </div>
+        
+    </ui:define>
+
+</ui:composition>
