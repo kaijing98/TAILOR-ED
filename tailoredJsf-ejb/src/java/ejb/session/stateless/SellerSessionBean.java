@@ -44,7 +44,7 @@ import util.security.CryptographicHelper;
 @Stateless
 public class SellerSessionBean implements SellerSessionBeanLocal {
 
-    @EJB
+    @EJB(name = "CustomerSessionBeanLocal")
     private CustomerSessionBeanLocal customerSessionBeanLocal;
 
     @PersistenceContext(unitName = "tailoredJsf-ejbPU")

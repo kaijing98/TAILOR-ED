@@ -38,6 +38,8 @@ public class Seller extends User implements Serializable {
     private List<Artwork> artworks;
     @OneToMany(mappedBy = "seller")
     private List<SelfCareBox> selfCareBoxes;
+    @OneToMany(mappedBy = "seller")
+    private List<MarketPlaceItem> marketPlaceItems;
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Customer> customers;
 
@@ -182,4 +184,18 @@ public class Seller extends User implements Serializable {
             }
         } 
     }   
+
+    /**
+     * @return the marketPlaceItems
+     */
+    public List<MarketPlaceItem> getMarketPlaceItems() {
+        return marketPlaceItems;
+    }
+
+    /**
+     * @param marketPlaceItems the marketPlaceItems to set
+     */
+    public void setMarketPlaceItems(List<MarketPlaceItem> marketPlaceItems) {
+        this.marketPlaceItems = marketPlaceItems;
+    }
 }

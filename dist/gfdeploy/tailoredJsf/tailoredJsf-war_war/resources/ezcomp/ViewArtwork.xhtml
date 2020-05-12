@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    
+    <cc:interface>
+    </cc:interface>
+
+    <cc:implementation>
+        
+        <h:form id="formViewArtwork">
+            
+            <p:dialog id="dialogViewArtwork" widgetVar="dialogViewArtwork" header="View Artwork" closable="true">
+
+                <p:panelGrid>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Artwork ID: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{artworkJSFManagedBean.artworkEntityToView.artworkId}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Artwork Name: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{artworkJSFManagedBean.artworkEntityToView.name}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Description: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{artworkJSFManagedBean.artworkEntityToView.description}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Tags: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{artworkJSFManagedBean.artworkEntityToView.tags}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                            <p:column colspan="2">
+                                <p:dataTable id="dtArtworkPrice" widgetVar="artworkPrice" var="artworkPrice" value="#{addArtworkPriceRowView.artworkPrices}" editable="true" style="margin-bottom:20px">
+                                    <f:facet name="header">
+                                        Row Editing with add functionality
+                                    </f:facet>
+
+                                    <p:ajax event="rowEdit" listener="#{addArtworkPriceRowView.onRowEdit}" update=":formCreateNewArtwork:msgs" />
+                                    <p:ajax event="rowEditCancel" listener="#{addArtworkPriceRowView.onRowCancel}" update=":formCreateNewArtwork:msgs" />
+
+
+                                    <p:column headerText="Price">
+                                        <p:cellEditor>
+                                            <f:facet name="output"><h:outputText value="#{artworkPrice.price}" /></f:facet>
+                                            <f:facet name="input"><p:inputText value="#{artworkPrice.price}" style="width:100%" label="Price"/></f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+
+                                    <p:column headerText="Format">
+                                        <p:cellEditor>
+                                            <f:facet name="output"><h:outputText value="#{artworkPrice.formatEnum}" /></f:facet>
+                                            <f:facet name="input">
+                                                <h:selectOneMenu value="#{artworkPrice.formatEnum}" style="width:100%">
+                                                    <f:selectItems value="#{editArtworkView.formats}" var="color" itemLabel="#{color}" itemValue="#{color}" />
+                                                </h:selectOneMenu>
+                                            </f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+
+                                    <p:column style="width:32px">
+                                        <p:rowEditor />
+                                    </p:column>
+                                </p:dataTable>
+                            </p:column>
+
+                        </p:row>
+                    
+                </p:panelGrid>
+
+            </p:dialog>
+            
+        </h:form>
+        
+    </cc:implementation>
+</html>

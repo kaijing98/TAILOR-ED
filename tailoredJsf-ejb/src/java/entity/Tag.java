@@ -45,6 +45,8 @@ public class Tag implements Serializable {
     private List<Post> posts;
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Artwork> artworks;
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<MarketPlaceItem> marketPlaceItems;
     
     public Tag() {
         artworks = new ArrayList<>();
@@ -134,5 +136,19 @@ public class Tag implements Serializable {
 
     public void setArtworks(List<Artwork> artworks) {
         this.artworks = artworks;
+    }
+
+    /**
+     * @return the marketPlaceItems
+     */
+    public List<MarketPlaceItem> getMarketPlaceItems() {
+        return marketPlaceItems;
+    }
+
+    /**
+     * @param marketPlaceItems the marketPlaceItems to set
+     */
+    public void setMarketPlaceItems(List<MarketPlaceItem> marketPlaceItems) {
+        this.marketPlaceItems = marketPlaceItems;
     }
 }

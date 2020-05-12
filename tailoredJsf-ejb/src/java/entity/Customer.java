@@ -54,6 +54,25 @@ public class Customer extends User implements Serializable {
     private List<Transaction> transactions;
     @ManyToMany(mappedBy = "customers", fetch = FetchType.LAZY)
     private List<Seller> sellers;
+    @ManyToMany(mappedBy = "customerlike", fetch = FetchType.LAZY)
+    private List<Post> likedPosts;
+    @ManyToMany(mappedBy = "customersave", fetch = FetchType.LAZY)
+    private List<Post> savedPosts;
+    
+    @ManyToMany(mappedBy = "customerlike", fetch = FetchType.LAZY)
+    private List<Artwork> likedArtworks;
+    @ManyToMany(mappedBy = "customersave", fetch = FetchType.LAZY)
+    private List<Artwork> savedArtworks;
+    
+    @ManyToMany(mappedBy = "customerlike", fetch = FetchType.LAZY)
+    private List<SelfCareBox> likedSelfCareBoxes;
+    @ManyToMany(mappedBy = "customersave", fetch = FetchType.LAZY)
+    private List<SelfCareBox> savedSelfCareBoxes;
+    
+    @ManyToMany(mappedBy = "customerlike", fetch = FetchType.LAZY)
+    private List<MarketPlaceItem> likedMarketPlaceItem;
+    @ManyToMany(mappedBy = "customersave", fetch = FetchType.LAZY)
+    private List<MarketPlaceItem> savedMarketPlaceItem;
 
     public Customer() {
     }
@@ -192,5 +211,117 @@ public class Customer extends User implements Serializable {
      */
     public void setSellers(List<Seller> sellers) {
         this.sellers = sellers;
+    }
+
+    /**
+     * @return the likedPosts
+     */
+    public List<Post> getLikedPosts() {
+        return likedPosts;
+    }
+
+    /**
+     * @param likedPosts the likedPosts to set
+     */
+    public void setLikedPosts(List<Post> likedPosts) {
+        this.likedPosts = likedPosts;
+    }
+
+    /**
+     * @return the savedPosts
+     */
+    public List<Post> getSavedPosts() {
+        return savedPosts;
+    }
+
+    /**
+     * @param savedPosts the savedPosts to set
+     */
+    public void setSavedPosts(List<Post> savedPosts) {
+        this.savedPosts = savedPosts;
+    }
+
+    /**
+     * @return the likedArtworks
+     */
+    public List<Artwork> getLikedArtworks() {
+        return likedArtworks;
+    }
+
+    /**
+     * @param likedArtworks the likedArtworks to set
+     */
+    public void setLikedArtworks(List<Artwork> likedArtworks) {
+        this.likedArtworks = likedArtworks;
+    }
+
+    /**
+     * @return the savedArtworks
+     */
+    public List<Artwork> getSavedArtworks() {
+        return savedArtworks;
+    }
+
+    /**
+     * @param savedArtworks the savedArtworks to set
+     */
+    public void setSavedArtworks(List<Artwork> savedArtworks) {
+        this.savedArtworks = savedArtworks;
+    }
+
+    /**
+     * @return the likedSelfCareBoxes
+     */
+    public List<SelfCareBox> getLikedSelfCareBoxes() {
+        return likedSelfCareBoxes;
+    }
+
+    /**
+     * @param likedSelfCareBoxes the likedSelfCareBoxes to set
+     */
+    public void setLikedSelfCareBoxes(List<SelfCareBox> likedSelfCareBoxes) {
+        this.likedSelfCareBoxes = likedSelfCareBoxes;
+    }
+
+    /**
+     * @return the savedSelfCareBoxes
+     */
+    public List<SelfCareBox> getSavedSelfCareBoxes() {
+        return savedSelfCareBoxes;
+    }
+
+    /**
+     * @param savedSelfCareBoxes the savedSelfCareBoxes to set
+     */
+    public void setSavedSelfCareBoxes(List<SelfCareBox> savedSelfCareBoxes) {
+        this.savedSelfCareBoxes = savedSelfCareBoxes;
+    }
+
+    /**
+     * @return the likedMarketPlaceItem
+     */
+    public List<MarketPlaceItem> getLikedMarketPlaceItem() {
+        return likedMarketPlaceItem;
+    }
+
+    /**
+     * @param likedMarketPlaceItem the likedMarketPlaceItem to set
+     */
+    public void setLikedMarketPlaceItem(List<MarketPlaceItem> likedMarketPlaceItem) {
+        this.likedMarketPlaceItem = likedMarketPlaceItem;
+    }
+
+    /**
+     * @return the savedMarketPlaceItem
+     */
+    public List<MarketPlaceItem> getSavedMarketPlaceItem() {
+        return savedMarketPlaceItem;
+    }
+
+    /**
+     * @param savedMarketPlaceItem the savedMarketPlaceItem to set
+     */
+    public void setSavedMarketPlaceItem(List<MarketPlaceItem> savedMarketPlaceItem) {
+        this.savedMarketPlaceItem = savedMarketPlaceItem;
     }
 }

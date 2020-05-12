@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -58,6 +59,15 @@ public class Artwork implements Serializable {
     private List<ArtworkPrice> artworkPrices;
     @ManyToMany(mappedBy = "artworks")
     private List<Tag> tags;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "ARTWORK_LIKES", joinColumns = @JoinColumn(name = "customerlike_id"),
+               inverseJoinColumns = @JoinColumn(name = "artwork_id"))
+    private List<Customer> customerlike;
+    
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "ARTWORK_SAVES", joinColumns = @JoinColumn(name = "customersave_id"),
+               inverseJoinColumns = @JoinColumn(name = "artwork_id"))
+    private List<Customer> customersave;
     
 
     public Artwork() {
@@ -193,5 +203,33 @@ public class Artwork implements Serializable {
                 }
             }
         }
+    }
+
+    /**
+     * @return the customerlike
+     */
+    public List<Customer> getCustomerlike() {
+        return customerlike;
+    }
+
+    /**
+     * @param customerlike the customerlike to set
+     */
+    public void setCustomerlike(List<Customer> customerlike) {
+        this.customerlike = customerlike;
+    }
+
+    /**
+     * @return the customersave
+     */
+    public List<Customer> getCustomersave() {
+        return customersave;
+    }
+
+    /**
+     * @param customersave the customersave to set
+     */
+    public void setCustomersave(List<Customer> customersave) {
+        this.customersave = customersave;
     }
 }

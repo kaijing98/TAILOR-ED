@@ -11,10 +11,12 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -63,6 +65,17 @@ public class Post implements Serializable {
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private User user;
+    @ManyToMany(mappedBy = "posts")
+    private List<Topic> topics;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "POST_LIKES", joinColumns = @JoinColumn(name = "customerlike_id"),
+               inverseJoinColumns = @JoinColumn(name = "post_id"))
+    private List<Customer> customerlike;
+    
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "POST_SAVES", joinColumns = @JoinColumn(name = "customersave_id"),
+               inverseJoinColumns = @JoinColumn(name = "post_id"))
+    private List<Customer> customersave;
 
     public Post() {
         tags = new ArrayList<Tag>();
@@ -183,5 +196,47 @@ public class Post implements Serializable {
 
     public void setTopic(String topic) {
         this.topic = topic;
+    }
+
+    /**
+     * @return the topics
+     */
+    public List<Topic> getTopics() {
+        return topics;
+    }
+
+    /**
+     * @param topics the topics to set
+     */
+    public void setTopics(List<Topic> topics) {
+        this.topics = topics;
+    }
+
+    /**
+     * @return the customerlike
+     */
+    public List<Customer> getCustomerlike() {
+        return customerlike;
+    }
+
+    /**
+     * @param customerlike the customerlike to set
+     */
+    public void setCustomerlike(List<Customer> customerlike) {
+        this.customerlike = customerlike;
+    }
+
+    /**
+     * @return the customersave
+     */
+    public List<Customer> getCustomersave() {
+        return customersave;
+    }
+
+    /**
+     * @param customersave the customersave to set
+     */
+    public void setCustomersave(List<Customer> customersave) {
+        this.customersave = customersave;
     }
 }

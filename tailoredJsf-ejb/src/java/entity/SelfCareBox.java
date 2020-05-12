@@ -10,10 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -67,6 +69,15 @@ public class SelfCareBox implements Serializable {
     private List<Rating> ratings;
     @ManyToMany(mappedBy = "selfCareBoxes")
     private List<Tag> tags;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = " SELFCAREBOX_LIKES", joinColumns = @JoinColumn(name = "customerlike_id"),
+               inverseJoinColumns = @JoinColumn(name = "selfcarebox_id"))
+    private List<Customer> customerlike;
+    
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "SELFCAREBOX_SAVES", joinColumns = @JoinColumn(name = "customersave_id"),
+               inverseJoinColumns = @JoinColumn(name = "selfcarebox_id"))
+    private List<Customer> customersave;
 
     public SelfCareBox() {
         selfCareSubscriptionDiscounts = new ArrayList<SelfCareSubscriptionDiscount>();
@@ -266,5 +277,33 @@ public class SelfCareBox implements Serializable {
                 }
             }
         }
+    }
+
+    /**
+     * @return the customerlike
+     */
+    public List<Customer> getCustomerlike() {
+        return customerlike;
+    }
+
+    /**
+     * @param customerlike the customerlike to set
+     */
+    public void setCustomerlike(List<Customer> customerlike) {
+        this.customerlike = customerlike;
+    }
+
+    /**
+     * @return the customersave
+     */
+    public List<Customer> getCustomersave() {
+        return customersave;
+    }
+
+    /**
+     * @param customersave the customersave to set
+     */
+    public void setCustomersave(List<Customer> customersave) {
+        this.customersave = customersave;
     }
 }

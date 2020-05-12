@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/Users/Shared/Tailored/tailoredJsf/tailoredJsf-ejb/src/java/entity/Tag.java</file>
+            <file>file:/Users/Shared/Tailored/tailoredJsf/tailoredJsf-ejb/src/java/ejb/session/stateless/SellerSessionBean.java</file>
+            <file>file:/Users/Shared/Tailored/tailoredJsf/tailoredJsf-ejb/src/java/entity/Customer.java</file>
+            <file>file:/Users/Shared/Tailored/tailoredJsf/tailoredJsf-ejb/src/java/ejb/session/stateless/CustomerSessionBean.java</file>
+            <file>file:/Users/Shared/Tailored/tailoredJsf/tailoredJsf-ejb/src/java/entity/Resource.java</file>
+            <file>file:/Users/Shared/Tailored/tailoredJsf/tailoredJsf-ejb/src/java/entity/Volunteer.java</file>
+            <file>file:/Users/Shared/Tailored/tailoredJsf/tailoredJsf-ejb/src/java/ejb/session/stateless/CustomerSessionBeanLocal.java</file>
+            <file>file:/Users/Shared/Tailored/tailoredJsf/tailoredJsf-ejb/src/java/entity/Topic.java</file>
+            <file>file:/Users/Shared/Tailored/tailoredJsf/tailoredJsf-ejb/src/java/entity/Post.java</file>
+            <file>file:/Users/Shared/Tailored/tailoredJsf/tailoredJsf-ejb/src/java/entity/Review.java</file>
+            <file>file:/Users/Shared/Tailored/tailoredJsf/tailoredJsf-ejb/src/java/entity/Seller.java</file>
+        </group>
+    </open-files>
+</project-private>

@@ -1,0 +1,216 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="./../template/masterTemplate.xhtml"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <div>
+            <h3>Admin Management</h3>
+
+            <h:form>
+                <p:menubar>
+                    <p:submenu label="File" icon="ui-icon-document">
+                        <p:menuitem value="Create New Admin" onclick="PF('dialogCreateNewAdmin').show()" icon="fa fa-plus"/>
+                    </p:submenu>
+                    <p:menuitem value="Update Your Profile" onclick="PF('dialogUpdateAdmin').show()" icon="fa fa-pencil"/>
+                </p:menubar>
+            </h:form>
+            
+            <style type="text/css">
+                .ui-row-editor .ui-row-editor-pencil {
+                    margin-left:8px;
+                }
+            </style>
+            
+            <h:form id="formAllAdmins">
+            
+            <p:messages id="messages" redisplay="false" closable="true" />
+
+            <p:dataTable id="dataTableAllAdmins" widgetVar="dataTableAllAdmins" value="#{adminJSFManagedBean.admins}" var="admin" rowKey="#{admin.userId}" rowIndexVar="row"
+                         rows="10" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50">
+
+                <p:column headerText="Admin ID" groupRow="true">
+                    <h:outputText value="#{admin.userId}" />
+                </p:column>
+                
+                <p:column headerText="Admin Username" groupRow="true" width="70">
+                    <h:outputText value="#{admin.username}" />
+                </p:column>
+
+                <p:column headerText="First Name" groupRow="false">
+                    <h:outputText value="#{admin.firstName}" />
+                </p:column>
+
+                <p:column headerText="Last Name" groupRow="false">
+                    <h:outputText value="#{admin.lastName}" />
+                </p:column>
+                
+                <p:column headerText="Email" groupRow="true" width="150">
+                    <h:outputText value="#{admin.email}" />
+                </p:column>
+                
+                <p:column headerText="Action" >
+                            <p:commandButton type = "submit" icon="pi pi-trash" actionListener="#{adminJSFManagedBean.deleteAdmin}" update="formAllAdmins:dataTableAllAdmins formAllAdmins:messages">
+                                <f:attribute name="adminToDelete" value="#{admin}" />
+                                    <p:confirm header="Confirmation" message="Are you sure you want to delete #{admin.firstName}?" icon="ui-icon-alert" />
+                            </p:commandButton>
+                </p:column>
+
+            </p:dataTable>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
+
+        </h:form>
+
+        <h:form id="formCreateNewAdmin">
+
+            <p:dialog id="dialogCreateNewAdmin" widgetVar="dialogCreateNewAdmin" header="Create New Admin" closable="true">
+
+                <p:messages id="messagesCreateNewAdmin" redisplay="false" />
+                <p:growl id="msgs" showDetail="true"/>
+
+                <p:panelGrid>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="firstName" value="First Name: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="firstName" value="#{adminJSFManagedBean.newAdmin.firstName}" placeholder="Enter admin name" required="true" requiredMessage="Name is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="firstName" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="lastName" value="Last Name: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="lastName" value="#{adminJSFManagedBean.newAdmin.lastName}" placeholder="Enter admin name" required="true" requiredMessage="Name is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="lastName" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="username" value="Username: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="username" value="#{adminJSFManagedBean.newAdmin.username}" placeholder="Enter username" required="true" requiredMessage="Username is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="username" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="email" value="Email: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="email" value="#{adminJSFManagedBean.newAdmin.email}" placeholder="Enter email" required="true" requiredMessage="Email is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="email" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column colspan="3">
+                            <p:commandButton type="reset" value="Clear" />&nbsp;
+                            <p:commandButton  value="Create New Admin" update="@form formAllAdmins:dataTableAllAdmins" actionListener="#{adminJSFManagedBean.createNewAdmin}" oncomplete="PF('dialogCreateNewAdmin').show();" />
+                        </p:column>
+                    </p:row>
+
+                </p:panelGrid>
+
+            </p:dialog>
+
+        </h:form>
+            
+        <h:form id="formUpdateAdmin">
+
+            <p:dialog id="dialogUpdateAdmin" widgetVar="dialogUpdateAdmin" header="Update Your Profile" closable="true">
+
+                <p:messages id="messagesUpdateAdmin" redisplay="false" />
+                <p:growl id="msgs" showDetail="true"/>
+
+                <p:panelGrid>
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Admin ID: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{adminJSFManagedBean.currentAdmin.userId}" />
+                        </p:column>
+                        <p:column>
+                            &nbsp;
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="firstName" value="First Name: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="firstName" value="#{adminJSFManagedBean.currentAdmin.firstName}" placeholder="Enter First Name" required="true" requiredMessage="Name is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="firstName" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="lastName" value="Last Name: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="lastName" value="#{adminJSFManagedBean.currentAdmin.lastName}" placeholder="Enter Last Name" required="true" requiredMessage="Name is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="lastName" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="email" value="Email: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="email" value="#{adminJSFManagedBean.currentAdmin.email}" placeholder="Enter Email" required="true" requiredMessage="Email is required" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="email" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column colspan="2">
+                            <p:commandButton type="reset" value="Clear" />&nbsp;
+                            <p:commandButton  value="Update Your Profile" actionListener="#{adminJSFManagedBean.updateAdmin}" oncomplete="PF('dialogUpdateAdmin').show();" />
+                        </p:column>
+                    </p:row>
+
+                </p:panelGrid>
+
+            </p:dialog>
+
+        </h:form>
+            
+        </div>
+        
+    </ui:define>
+
+</ui:composition>

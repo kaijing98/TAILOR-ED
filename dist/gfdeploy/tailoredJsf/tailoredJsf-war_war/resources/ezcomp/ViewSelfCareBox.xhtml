@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    
+    <cc:interface>
+    </cc:interface>
+
+    <cc:implementation>
+        
+        <h:form id="formViewSelfCareBox">
+            
+            <p:dialog id="dialogViewSelfCareBox" widgetVar="dialogViewSelfCareBox" header="View Self Care Box" closable="true">
+
+                <p:panelGrid>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Self Care Box ID: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{selfCareBoxManagedBean.boxToView.selfCareBoxId}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Self Care Box Name: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{selfCareBoxManagedBean.boxToView.name}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Description: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{selfCareBoxManagedBean.boxToView.description}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Tags: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{selfCareBoxManagedBean.boxToView.tags}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                            <p:column colspan="2">
+                                <p:dataTable id="dtSelfCareSubscriptionDiscount" widgetVar="selfCareSubscriptionDiscount" var="selfCareSubscriptionDiscount" value="#{addSelfCareSubscriptionDiscountRowView.selfCareSubscriptionDiscounts}" editable="true" style="margin-bottom:20px">
+                                    <f:facet name="header">
+                                        Row Editing with add functionality
+                                    </f:facet>
+
+                                    <p:ajax event="rowEdit" listener="#{addSelfCareSubscriptionDiscountRowView.onRowEdit}" update=":formCreateNewSelfCareBox:msgs" />
+                                    <p:ajax event="rowEditCancel" listener="#{addSelfCareSubscriptionDiscountRowView.onRowCancel}" update=":formCreateNewSelfCareBox:msgs" />
+
+
+                                    <p:column headerText=" Subcription Discounts">
+                                        <p:cellEditor>
+                                            <f:facet name="output"><h:outputText value="#{selfCareSubscriptionDiscount.discountPercentage}" /></f:facet>
+                                            <f:facet name="input"><p:inputText value="#{selfCareSubscriptionDiscount.discountPercentage}" style="width:100%" label="Discount"/></f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+
+                                    <p:column headerText="Duration">
+                                        <p:cellEditor>
+                                            <f:facet name="output"><h:outputText value="#{selfCareSubscriptionDiscount.durationEnum}" /></f:facet>
+                                            <f:facet name="input">
+                                                <h:selectOneMenu value="#{selfCareSubscriptionDiscount.durationEnum}" style="width:100%">
+                                                    <f:selectItems value="#{editSelfCareBoxView.durations}" var="color" itemLabel="#{color}" itemValue="#{color}" />
+                                                </h:selectOneMenu>
+                                            </f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+
+                                    <p:column style="width:32px">
+                                        <p:rowEditor />
+                                    </p:column>
+                                </p:dataTable>
+                            </p:column>
+
+                        </p:row>
+                    
+                </p:panelGrid>
+
+            </p:dialog>
+            
+        </h:form>
+        
+    </cc:implementation>
+</html>
