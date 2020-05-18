@@ -19,6 +19,17 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+build/
+dist/gfdeploy/
+nbproject/private/
+tailoredJsf-ejb/build/
+tailoredJsf-ejb/dist/
+tailoredJsf-war/build/
+tailoredJsf-war/dist/
+tailoredJsf-war/nbproject/private/
+tailoredJsfRws/build/
+tailoredJsfRws/dist/
+tailoredJsfRws/nbproject/private
 /tailoredJsf/nbproject/private/
 /tailoredJsf/tailoredJsf-war/nbproject/private/
 /tailoredJsf/tailoredJsf-ejb/nbproject/private/

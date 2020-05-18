@@ -34,7 +34,7 @@ public class Event implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long eventId;
     
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     @NotNull
     private String name;
     @Column(nullable = false)
@@ -55,6 +55,9 @@ public class Event implements Serializable {
     private List<String> image;
     @Enumerated(EnumType.STRING)
     private EventTypeEnum eventTypeEnum;
+    @Column(columnDefinition = "boolean default false")
+    @NotNull
+    private boolean isDeleted;
     
     @OneToMany(mappedBy = "event")
     private List<EventOrder> eventOrders;
@@ -233,6 +236,20 @@ public class Event implements Serializable {
      */
     public void setAdmin(Admin admin) {
         this.admin = admin;
+    }
+
+    /**
+     * @return the isDeleted
+     */
+    public boolean isIsDeleted() {
+        return isDeleted;
+    }
+
+    /**
+     * @param isDeleted the isDeleted to set
+     */
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
     }
     
 }

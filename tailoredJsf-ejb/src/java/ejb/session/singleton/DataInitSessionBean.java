@@ -20,6 +20,7 @@ import entity.Artwork;
 import entity.ArtworkOrder;
 import entity.ArtworkPrice;
 import entity.Customer;
+import entity.Event;
 import entity.Offences;
 import entity.OrderHistory;
 import entity.Post;
@@ -33,7 +34,9 @@ import entity.Transaction;
 import entity.User;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -42,12 +45,15 @@ import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import util.enumeration.DurationEnum;
+import util.enumeration.EventTypeEnum;
 import util.enumeration.FormatEnum;
 import util.enumeration.PaymentTypeEnum;
 import util.exception.ArtworkNotCreatedException;
 import util.exception.ArtworkNotFoundException;
 import util.exception.ArtworkPriceNotFoundException;
 import util.exception.DeleteArtworkException;
+import util.exception.EventExistsException;
+import util.exception.EventNotFoundException;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.InputDataValidationException;
 import util.exception.OffenceExistException;
@@ -112,6 +118,7 @@ public class DataInitSessionBean {
     public void postConstruct() {
         populateTags();
         populateUsersWithTest();
+        populateEvents();
         populateOffences();
         //populateArtworks();
         //populateSelfCareBoxes();
@@ -134,7 +141,7 @@ public class DataInitSessionBean {
 //                Seller seller = sellerSessionBeanLocal.viewMySellerDetails("peter", "password");
 //                seller.setEmail("peter@gmail.com");
 //                seller.setFirstName("Deci");
-//                sellerSessionBeanLocal.updateMySellerDetails(seller);
+//               sellerSessionBeanLocal.updateMySellerDetails(seller);
 //                sellerSessionBeanLocal.deleteSeller(seller.getUserId());
 //
 //                List<Seller> listSeller = sellerSessionBeanLocal.retrieveAllSellers();
@@ -251,8 +258,10 @@ public class DataInitSessionBean {
 //                System.out.println("Admin update success: " + admin2.getEmail());
 //
 //                //test admin delete
-//                adminSessionBeanLocal.deleteAdmin(admin2.getUserId());
+//            adminSessionBeanLocal.deleteAdmin(admin2.getUserId());
                 //adminSessionBeanLocal.createNewAdmin(new Admin("yitong","password","yitong","yang","yitong@gmail.com"));
+                
+            
             } catch (UserUsernameExistException | UnknownPersistenceException | InputDataValidationException ex) {
                 ex.printStackTrace();
             }
@@ -421,6 +430,51 @@ public class DataInitSessionBean {
         }
     }
 
+    
+    
+    private void populateEvents(){
+      
+        if (adminSessionBeanLocal.retrieveAllEvents().size() <= 0){
+            
+            
+             try {
+                 List<String> imageArrayList = new ArrayList<String>();
+                 //retrieve admin to create event with
+                 Admin adminCreateEvent = adminSessionBeanLocal.retrieveAdminByUsername("adminEmory");
+                //admin create event
+                Long eventID = adminSessionBeanLocal.createNewEvent(new Event("bob", "testdescription", "otherTest", "newstring", 12.0f, imageArrayList, EventTypeEnum.OpenToPublic), adminCreateEvent.getUserId());
+                //adminSessionBeanLocal.createNewEvent(new Event());
+                
+                Event event1Retrieved = adminSessionBeanLocal.retrieveEventById(eventID);
+                
+                System.out.println("event successfully found with name of: " + event1Retrieved.getName());
+                
+                
+                event1Retrieved.setName("peter");
+                event1Retrieved.setTime("10:10");
+                event1Retrieved.setVenue("Paris Texas");
+                event1Retrieved.setEventTypeEnum(EventTypeEnum.PrivateEvent);
+                event1Retrieved.setPrice(14.0f);
+                imageArrayList.add("UpdatedImage");
+                event1Retrieved.setImage(imageArrayList);
+                adminSessionBeanLocal.updateEvent(event1Retrieved);
+                
+                 adminSessionBeanLocal.deleteEvent(event1Retrieved.getEventId());
+
+
+
+
+            } catch (UnknownPersistenceException | InputDataValidationException | EventExistsException | UserNotFoundException | EventNotFoundException ex) {
+                System.out.println("Failed to create event");
+            }
+        
+        }
+        
+    
+    }
+    
+ 
+    
     private void populateOffences() {
         if (customerSessionBeanLocal.retrieveAllOffences().size() <= 0) {
             try {
