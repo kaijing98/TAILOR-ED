@@ -6,9 +6,12 @@
 package ejb.session.stateless;
 
 import entity.Admin;
+import entity.Event;
 import entity.Offences;
 import java.util.List;
 import javax.ejb.Local;
+import util.exception.EventExistsException;
+import util.exception.EventNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.OffenceExistException;
 import util.exception.OffenceNotFoundException;
@@ -42,4 +45,16 @@ public interface AdminSessionBeanLocal {
     public List<Offences> retrieveAllOffences();
 
     public Offences retrieveOffenceById(Long offenceId) throws OffenceNotFoundException;
+
+    
+
+    public List<Event> retrieveAllEvents();
+
+    public Long createNewEvent(Event newEventEntity, Long adminId) throws UnknownPersistenceException, InputDataValidationException, EventExistsException, UserNotFoundException;
+
+    public Event retrieveEventById(Long eventId) throws EventNotFoundException;
+
+    public void updateEvent(Event event) throws InputDataValidationException, EventNotFoundException;
+
+    public void deleteEvent(Long eventId) throws EventNotFoundException;
 }

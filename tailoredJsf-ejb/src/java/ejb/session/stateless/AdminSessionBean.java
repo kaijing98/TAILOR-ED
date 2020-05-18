@@ -7,6 +7,8 @@ package ejb.session.stateless;
 
 import entity.Admin;
 import entity.Comment;
+import entity.Event;
+import entity.EventOrder;
 import entity.Offences;
 import entity.Seller;
 import entity.Post;
@@ -24,6 +26,8 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import util.exception.EventExistsException;
+import util.exception.EventNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.OffenceExistException;
 import util.exception.OffenceNotFoundException;
@@ -95,6 +99,57 @@ public class AdminSessionBean implements AdminSessionBeanLocal {
         }
     }
     
+    
+    //create new event practice code
+    @Override
+    public Long createNewEvent (Event newEventEntity,Long adminId) throws UnknownPersistenceException, InputDataValidationException,EventExistsException, UserNotFoundException {
+        
+        
+        try{
+            Admin admin = retrieveAdminByUserId(adminId);
+            Set<ConstraintViolation<Event>>constraintViolations = validator.validate(newEventEntity);
+        
+            if(constraintViolations.isEmpty())
+            {
+                
+                em.persist(newEventEntity);
+                admin.getEvents().add(newEventEntity);
+                newEventEntity.setAdmin(admin);
+                em.flush();
+                
+                
+
+                return newEventEntity.getEventId();
+            }
+            else
+            { 
+                throw new InputDataValidationException(prepareEventInputDataValidationErrorsMessage(constraintViolations));
+            }            
+        }
+        catch(PersistenceException ex)
+        {
+            if(ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException"))
+            {
+                if(ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException"))
+                {
+                    throw new EventExistsException();
+                }
+                else
+                {
+                    throw new UnknownPersistenceException(ex.getMessage());
+                }
+            }
+            else
+            {
+                throw new UnknownPersistenceException(ex.getMessage());
+            }
+            
+        } catch (UserNotFoundException ex) {
+            throw new UserNotFoundException("Unable to find the user as the user does not exist");
+        } 
+    
+    }
+    
     //create an offence
     //note the type of offences is initialized by admin only
     //at point of initialization, no relationship to customer/seller is set
@@ -151,7 +206,66 @@ public class AdminSessionBean implements AdminSessionBeanLocal {
             throw new OffenceNotFoundException("OffenceId " + offenceId + " does not exist!");
         }
     }
+    @Override
+    public Event retrieveEventById(Long eventId) throws EventNotFoundException{
+        Event event = em.find(Event.class, eventId);
+        
+        if(event != null)
+        {
+            return event;
+        }
+        else
+        {
+            throw new EventNotFoundException("EventId " + eventId + " does not exist!");
+        }
+        
+    }
+    @Override
+    public List<Event> retrieveAllEvents() {
+        Query query = em.createQuery("SELECT e FROM Event e WHERE e.isDeleted = FALSE");
+        return query.getResultList();
+    }
     
+    @Override
+    public void updateEvent(Event event) throws InputDataValidationException, EventNotFoundException {
+        Set<ConstraintViolation<Event>> constraintViolations = validator.validate(event);
+
+        if (constraintViolations.isEmpty()) {
+            if (event.getEventId() != null) {
+                Event eventToUpdate = retrieveEventById(event.getEventId());
+                eventToUpdate.setName(event.getName());
+                eventToUpdate.setDescription(event.getDescription());
+                eventToUpdate.setVenue(event.getVenue());
+                eventToUpdate.setTime(event.getTime());
+                eventToUpdate.setPrice(event.getPrice());
+                eventToUpdate.setImage(event.getImage());
+                eventToUpdate.setEventTypeEnum(event.getEventTypeEnum());
+                
+               
+            } else {
+                throw new EventNotFoundException("Event ID not provided for event to be updated");
+            }
+        } else {
+            throw new InputDataValidationException(prepareEventInputDataValidationErrorsMessage(constraintViolations));
+        }
+    }
+    
+    @Override
+    public void deleteEvent(Long eventId) throws EventNotFoundException
+    {
+        try {
+            Event eventToRemove = retrieveEventById(eventId);
+            List<EventOrder> ordersAssociated  = eventToRemove.getEventOrders();
+            
+            if(ordersAssociated.isEmpty()){
+                em.remove(eventToRemove);
+            } else {
+                eventToRemove.setIsDeleted(true);
+            }   
+        } catch (EventNotFoundException ex) {
+            throw new EventNotFoundException("Event ID " + eventId + " does not exist!");
+        }       
+    }
     @Override
     public List<Offences> retrieveAllOffences()
     {
@@ -266,6 +380,18 @@ public class AdminSessionBean implements AdminSessionBeanLocal {
     }
     
     private String prepareOffenceInputDataValidationErrorsMessage(Set<ConstraintViolation<Offences>>constraintViolations)
+    {
+        String msg = "Input data validation error!:";
+            
+        for(ConstraintViolation constraintViolation:constraintViolations)
+        {
+            msg += "\n\t" + constraintViolation.getPropertyPath() + " - " + constraintViolation.getInvalidValue() + "; " + constraintViolation.getMessage();
+        }
+        
+        return msg;
+    }
+    
+     private String prepareEventInputDataValidationErrorsMessage(Set<ConstraintViolation<Event>>constraintViolations)
     {
         String msg = "Input data validation error!:";
             
