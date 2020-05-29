@@ -9,6 +9,8 @@ import entity.Artwork;
 import entity.ArtworkOrder;
 import entity.ArtworkPrice;
 import entity.Customer;
+import entity.Event;
+import entity.EventOrder;
 import entity.OrderHistory;
 import entity.SelfCareBox;
 import entity.SelfCareBoxOrder;
@@ -33,6 +35,7 @@ import util.enumeration.PaymentTypeEnum;
 import util.exception.ArtworkNotFoundException;
 import util.exception.ArtworkPriceNotFoundException;
 import util.exception.DiscountNotFoundException;
+import util.exception.EventNotFoundException;
 import util.exception.OrderNotCreatedException;
 import util.exception.OrderNotFoundException;
 import util.exception.SelfCareBoxNotFoundException;
@@ -50,6 +53,10 @@ public class OrderSessionBeanLocal implements OrderSessionBeanLocalLocal {
 
     @EJB(name = "ProductCatalogueSessionBeanLocal")
     private ProductCatalogueSessionBeanLocal productCatalogueSessionBeanLocal;
+    
+      @EJB(name = "AdminSessionBeanLocal")
+    private AdminSessionBeanLocal adminSessionBeanLocal;
+
 
     
     
@@ -62,6 +69,37 @@ public class OrderSessionBeanLocal implements OrderSessionBeanLocalLocal {
     public OrderSessionBeanLocal(){
         validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.getValidator();
+    }
+    @Override
+    public EventOrder createEventOrder( Long eventId, Long customerID,int quantity) throws EventNotFoundException, OrderNotCreatedException, UserNotFoundException{
+        EventOrder eventOrder = new EventOrder();
+        
+        Event myEvent = adminSessionBeanLocal.retrieveEventById(eventId);
+        
+        
+        eventOrder.setPriceAtTimeOfPurchase(myEvent.getPrice() * quantity);
+        
+        eventOrder.setEvent(myEvent);
+        
+        myEvent.getEventOrders().add(eventOrder);
+        
+        Customer currCustomer = customerSessionBeanLocal.retrieveCustomerById(customerID);
+        
+        eventOrder.setCustomer(currCustomer);
+        currCustomer.getOrders().add(eventOrder);
+       
+        eventOrder.setQuantity(quantity);
+        eventOrder.setOrderStatusEnum(OrderStatusEnum.Processing);
+        Set<ConstraintViolation<EventOrder>> constraintViolations = validator.validate(eventOrder);
+        if(constraintViolations.isEmpty()){
+            em.persist(eventOrder);
+            em.flush();
+           
+            return eventOrder;
+        }
+        else {
+            throw new OrderNotCreatedException("Event order was not created.");
+        }
     }
     
     @Override
@@ -153,6 +191,24 @@ public class OrderSessionBeanLocal implements OrderSessionBeanLocalLocal {
         } else {
             throw new OrderNotFoundException("Order ID: " + orderID + " does not exist!");
         }
+    }
+    
+    @Override
+    public List<EventOrder> retrieveAllEventOrdersByCustomerId(Long customerId) throws UserNotFoundException {
+        List<EventOrder> eventOrders = new ArrayList<>();
+        try {
+        List<OrderHistory> or = customerSessionBeanLocal.retrieveCustomerById(customerId).getOrders();
+        for(OrderHistory orderHistory:or) {
+           
+            if(orderHistory instanceof EventOrder) {
+                
+                eventOrders.add((EventOrder) orderHistory);
+            }
+        }
+        } catch(UserNotFoundException ex){
+            throw new UserNotFoundException("EventOrder Id can not be found"); 
+        }
+        return eventOrders;
     }
     
     @Override

@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.ArtworkOrder;
+import entity.EventOrder;
 import entity.OrderHistory;
 import entity.SelfCareBoxOrder;
 import entity.Transaction;
@@ -15,6 +16,7 @@ import util.enumeration.PaymentTypeEnum;
 import util.exception.ArtworkNotFoundException;
 import util.exception.ArtworkPriceNotFoundException;
 import util.exception.DiscountNotFoundException;
+import util.exception.EventNotFoundException;
 import util.exception.OrderNotCreatedException;
 import util.exception.OrderNotFoundException;
 import util.exception.SelfCareBoxNotFoundException;
@@ -44,5 +46,9 @@ public interface OrderSessionBeanLocalLocal {
     public List<SelfCareBoxOrder> retrieveAllSelfCareBoxOrderByCustomerId(Long customerId) throws UserNotFoundException;
 
     public SelfCareBoxOrder createSelfCareBoxOrder(Long selfCareBoxID, Long discountID, Long customerID, int quantity) throws DiscountNotFoundException, SelfCareBoxNotFoundException, OrderNotCreatedException, UserNotFoundException;
+
+    public EventOrder createEventOrder(Long eventId, Long customerID, int quantity) throws EventNotFoundException, OrderNotCreatedException, UserNotFoundException;
+
+    public List<EventOrder> retrieveAllEventOrdersByCustomerId(Long customerId) throws UserNotFoundException;
     
 }
