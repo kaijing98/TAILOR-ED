@@ -21,6 +21,7 @@ import entity.ArtworkOrder;
 import entity.ArtworkPrice;
 import entity.Customer;
 import entity.Event;
+import entity.EventOrder;
 import entity.Offences;
 import entity.OrderHistory;
 import entity.Post;
@@ -57,6 +58,7 @@ import util.exception.EventNotFoundException;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.InputDataValidationException;
 import util.exception.OffenceExistException;
+import util.exception.OrderNotCreatedException;
 import util.exception.PostExistException;
 import util.exception.ReviewExistException;
 import util.exception.ReviewNotFoundException;
@@ -108,6 +110,9 @@ public class DataInitSessionBean {
 
     @EJB(name = "TagSessionBeanLocal")
     private TagSessionBeanLocal tagSessionBeanLocal;
+    
+     @EJB(name = "OrderSessionBeanLocal")
+    private OrderSessionBeanLocalLocal orderSessionBeanLocalLocal;
 
     @PersistenceContext(unitName = "tailoredJsf-ejbPU")
     private EntityManager em;
@@ -458,12 +463,18 @@ public class DataInitSessionBean {
                 event1Retrieved.setPrice(14.0f);
                 adminSessionBeanLocal.updateEvent(event1Retrieved);
                 
+                 //adminSessionBeanLocal.deleteEvent(event1Retrieved.getEventId());
+                 List<Customer> customers = customerSessionBeanLocal.retrieveAllCustomers();
+                 
+                 EventOrder eventOrder = orderSessionBeanLocalLocal.createEventOrder(event1Retrieved.getEventId(),customers.get(0).getUserId() ,2);
+                 
+                 List<EventOrder> events = orderSessionBeanLocalLocal.retrieveAllEventOrdersByCustomerId(customers.get(0).getUserId());
+                 System.out.println("number of eventorders created: " + events.size());
+
                  adminSessionBeanLocal.deleteEvent(event1Retrieved.getEventId());
 
 
-
-
-            } catch (UnknownPersistenceException | InputDataValidationException | EventExistsException | UserNotFoundException | EventNotFoundException ex) {
+            } catch (UnknownPersistenceException | InputDataValidationException | EventExistsException | UserNotFoundException | EventNotFoundException | OrderNotCreatedException ex) {
                 System.out.println("Failed to create event");
             }
         
