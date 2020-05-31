@@ -438,11 +438,12 @@ public class DataInitSessionBean {
             
             
              try {
-                 List<String> imageArrayList = new ArrayList<String>();
+                 //random image file path -> note this file path actually does not exist
+                 String image = "image/imageA.jpg";
                  //retrieve admin to create event with
                  Admin adminCreateEvent = adminSessionBeanLocal.retrieveAdminByUsername("adminEmory");
                 //admin create event
-                Long eventID = adminSessionBeanLocal.createNewEvent(new Event("bob", "testdescription", "otherTest", "newstring", 12.0f, imageArrayList, EventTypeEnum.OpenToPublic), adminCreateEvent.getUserId());
+                Long eventID = adminSessionBeanLocal.createNewEvent(new Event("Event 1", "testdescription", "Market Street", "17:00", 12.0f, image, EventTypeEnum.OpenToPublic), adminCreateEvent.getUserId());
                 //adminSessionBeanLocal.createNewEvent(new Event());
                 
                 Event event1Retrieved = adminSessionBeanLocal.retrieveEventById(eventID);
@@ -455,8 +456,6 @@ public class DataInitSessionBean {
                 event1Retrieved.setVenue("Paris Texas");
                 event1Retrieved.setEventTypeEnum(EventTypeEnum.PrivateEvent);
                 event1Retrieved.setPrice(14.0f);
-                imageArrayList.add("UpdatedImage");
-                event1Retrieved.setImage(imageArrayList);
                 adminSessionBeanLocal.updateEvent(event1Retrieved);
                 
                  adminSessionBeanLocal.deleteEvent(event1Retrieved.getEventId());
