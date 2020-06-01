@@ -39,7 +39,9 @@
                         <p:menuitem value="Create Offence" outcome="/offenceManagement/offenceManagement" icon="fa fa-arrow-circle-right" rendered="#{adminLoginJSFManagedBean.sessionClass eq 'Admin'}" />
                     </p:submenu>
                     
-                    
+                    <p:submenu label="Event Management" rendered="#{adminLoginJSFManagedBean.sessionClass eq 'Admin'}">
+                        <p:menuitem value="Manage Event" outcome="/eventManagement/eventManagement" icon="fa fa-arrow-circle-right" rendered="#{adminLoginJSFManagedBean.sessionClass eq 'Admin'}" />
+                    </p:submenu>
                     
                     <!-- this is a test to test the components of test UI
                          to be removed later, kept now for easier testing

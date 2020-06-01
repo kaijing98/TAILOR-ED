@@ -52,7 +52,7 @@ public class Event implements Serializable {
     private float price;
     @Column(nullable = false)
     @NotNull
-    private List<String> image;
+    private String image;
     @Enumerated(EnumType.STRING)
     private EventTypeEnum eventTypeEnum;
     @Column(columnDefinition = "boolean default false")
@@ -69,7 +69,7 @@ public class Event implements Serializable {
         
     }
     
-    public Event(String name, String description, String venue, String time, float price, List<String> image, EventTypeEnum eventTypeEnum) {
+    public Event(String name, String description, String venue, String time, float price, String image, EventTypeEnum eventTypeEnum) {
         this.name = name;
         this.description = description;
         this.venue = venue;
@@ -185,14 +185,14 @@ public class Event implements Serializable {
     /**
      * @return the image
      */
-    public List<String> getImage() {
+    public String getImage() {
         return image;
     }
 
     /**
      * @param image the image to set
      */
-    public void setImage(List<String> image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
