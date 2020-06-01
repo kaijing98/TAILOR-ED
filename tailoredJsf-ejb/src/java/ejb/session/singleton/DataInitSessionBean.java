@@ -455,8 +455,6 @@ public class DataInitSessionBean {
                 
                 System.out.println("event successfully found with name of: " + event1Retrieved.getName());
                 
-                
-                event1Retrieved.setName("peter");
                 event1Retrieved.setTime("10:10");
                 event1Retrieved.setVenue("Paris Texas");
                 event1Retrieved.setEventTypeEnum(EventTypeEnum.PrivateEvent);
@@ -471,7 +469,7 @@ public class DataInitSessionBean {
                  List<EventOrder> events = orderSessionBeanLocalLocal.retrieveAllEventOrdersByCustomerId(customers.get(0).getUserId());
                  System.out.println("number of eventorders created: " + events.size());
 
-                 adminSessionBeanLocal.deleteEvent(event1Retrieved.getEventId());
+                 //adminSessionBeanLocal.deleteEvent(event1Retrieved.getEventId());
 
 
             } catch (UnknownPersistenceException | InputDataValidationException | EventExistsException | UserNotFoundException | EventNotFoundException | OrderNotCreatedException ex) {

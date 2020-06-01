@@ -1,0 +1,290 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="./../template/masterTemplate.xhtml"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <div>
+            <h3>Event Management</h3>
+
+            <h:form>
+                <p:menubar>
+                    <p:submenu label="File" icon="ui-icon-document">
+                        <p:menuitem value="Create New Event" onclick="PF('dialogCreateNewEvent').show()" icon="fa fa-plus"/>
+                    </p:submenu>
+                </p:menubar>
+            </h:form>
+            
+            <style type="text/css">
+                .ui-row-editor .ui-row-editor-pencil {
+                    margin-left:8px;
+                }
+            </style>
+
+            <h:form id="formAllEvents">
+
+                <p:messages id="messages" redisplay="false" closable="true" />
+                
+                <p:dataTable id="dataTableAllEvents" widgetVar="dataTableAllEvents" value="#{eventJSFManagedBean.events}" var="events" rowKey="#{events.eventId}" rowIndexVar="row"
+                             rows="10" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50">                          
+
+                <p:column headerText="Name" style="width:10%;">
+                    <h:outputText value="#{events.name}" />
+                </p:column>
+                    
+                    <p:column headerText="Description" >
+                    <h:outputText value="#{events.description}" />
+                </p:column>
+            
+                    <p:column headerText="Venue" style="width:15%;">
+                    <h:outputText value="#{events.venue}" />
+                </p:column>
+                    
+                    <p:column headerText="Time" style="width:10%;">
+                    <h:outputText value="#{events.time}" />
+                </p:column>
+                    
+                    <p:column headerText="Price" style="width:7%;">
+                    <h:outputText value="#{events.price}" />
+                </p:column>
+                    
+                    <p:column headerText="Image" >
+                    <p:graphicImage style= "height: 300px; width: 100%; object-fit: cover;" value="http://localhost:8080/#{events.image}"/>
+                </p:column>
+                    
+                    <p:column headerText="Event Type" style="width:12%;">
+                        <h:outputText value="#{events.eventTypeEnum}" />
+                </p:column>
+                <p:column headerText="Action" style="width:10%;">
+                            <p:commandButton actionListener="#{eventJSFManagedBean.doUpdateEvent}" update="formUpdateEvent" oncomplete="PF('dialogUpdateEvent').show()" icon="pi pi-pencil" title="Update">
+                                <f:attribute name="eventToUpdate" value="#{events}" />
+                            </p:commandButton>
+                            <p:commandButton type = "submit" icon="pi pi-trash" actionListener="#{eventJSFManagedBean.deleteEvent}" update="formAllEvents:dataTableAllEvents formAllEvents:messages">
+                                <f:attribute name="eventToDelete" value="#{events}" />
+                                    <p:confirm header="Confirmation" message="Are you sure you want to delete #{events.name}?" icon="ui-icon-alert" />
+                            </p:commandButton>
+                </p:column>
+
+            </p:dataTable>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
+
+        </h:form>
+
+            <h:form id="formCreateNewEvent" enctype="multipart/form-data">
+
+                <p:dialog id="dialogCreateNewEvent" widgetVar="dialogCreateNewEvent" header="Create New Event" closable="true" width="500" height="600">
+
+                    <p:messages id="messagesCreateNewEvent" redisplay="false" />
+                    <p:growl id="msgs" showDetail="true"/>
+                    <p:panelGrid>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="name" value="Name: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="name" value="#{eventJSFManagedBean.newEvent.name}" placeholder="Event A" required="true" requiredMessage="Name is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="name" />
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="description" value="Description " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="description" value="#{eventJSFManagedBean.newEvent.description}" placeholder="What is this event about?" required="true" requiredMessage="Description is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="description" />
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="venue" value="Venue " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="venue" value="#{eventJSFManagedBean.newEvent.venue}" placeholder="Where is the event?" required="true" requiredMessage="Venue is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="venue" />
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="time" value="Time " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="time" value="#{eventJSFManagedBean.newEvent.time}" placeholder="What time is the event?" required="true" requiredMessage="Time is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="time" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="image" value="Image Upload: " style="font-weight: bold;"></p:outputLabel>
+                            </p:column>
+                            <p:column>
+                                <p:fileUpload id="image" value="#{eventJSFManagedBean.file}" required="true" requiredMessage="Image is required" mode="simple" skinSimple="true"
+                                              dragDropSupport="true" update="msgs" sizeLimit="10000000" fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
+
+                            </p:column>
+                        </p:row> 
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="price" value="Price: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputNumber id="price" value="#{eventJSFManagedBean.newEvent.price}" placeholder="0.00" symbol="S$ " required="true" requiredMessage="Price is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="price" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column headerText="Event Type" >
+                                <p:outputLabel value="Event Type: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                
+                            <h:selectOneMenu value="#{eventJSFManagedBean.newEvent.eventTypeEnum}" style="width:100%">
+                                    <f:selectItems value="#{eventJSFManagedBean.selectedEventTypes}"/>
+                            </h:selectOneMenu>
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column colspan="2">
+                                <p:commandButton type="reset" value="Clear" />&nbsp;
+                                <p:commandButton  value="Create New Event" update="@form formAllEvents:dataTableAllEvents" actionListener="#{eventJSFManagedBean.createNewEvent}" oncomplete="PF('dialogCreateNewEvent').show();" ajax="false" />
+                            </p:column>
+                        </p:row>
+
+                    </p:panelGrid>
+
+                </p:dialog>
+
+            </h:form>
+            
+            <h:form id="formUpdateEvent" enctype="multipart/form-data">
+
+                <p:dialog id="dialogUpdateEvent" widgetVar="dialogUpdateEvent" header="Update Event" closable="true" width="500" height="600">
+
+                    <p:messages id="messagesUpdateEvent" redisplay="false" />
+                    <p:growl id="msgs" showDetail="true"/>
+
+                    <p:panelGrid>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="name" value="Name: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="name" value="#{eventJSFManagedBean.selectedEventToUpdate.name}" placeholder="Event A" required="true" requiredMessage="Name is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="name" />
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="description" value="Description " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="description" value="#{eventJSFManagedBean.selectedEventToUpdate.description}" placeholder="What is this event about?" required="true" requiredMessage="Description is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="description" />
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="venue" value="Venue " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="venue" value="#{eventJSFManagedBean.selectedEventToUpdate.venue}" placeholder="Where is the event?" required="true" requiredMessage="Venue is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="venue" />
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="time" value="Time " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="time" value="#{eventJSFManagedBean.selectedEventToUpdate.time}" placeholder="What time is the event?" required="true" requiredMessage="Time is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="time" />
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="image" value="Image Upload: " style="font-weight: bold;"></p:outputLabel>
+                            </p:column>
+                            <p:column>
+                                <p:fileUpload id="image" value="#{eventJSFManagedBean.file}" mode="simple" skinSimple="true"
+                                              dragDropSupport="true" update="msgs" sizeLimit="10000000" fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="price" value="Price: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputNumber id="price" value="#{eventJSFManagedBean.selectedEventToUpdate.price}" placeholder="0.00" symbol="S$ " required="true" requiredMessage="Price is required" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="price" />
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column headerText="Event Type" >
+                                <p:outputLabel value="Event Type: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                
+                            <h:selectOneMenu value="#{eventJSFManagedBean.selectedEventToUpdate.eventTypeEnum}" style="width:100%">
+                                    <f:selectItems value="#{eventJSFManagedBean.selectedEventTypes}"/>
+                            </h:selectOneMenu>
+                            </p:column>
+                        </p:row>
+                        
+
+                        <p:row>
+                            <p:column colspan="2">
+                                <p:commandButton type="reset" value="Clear" />&nbsp;
+                                <p:commandButton  value="Update Current Event" update="@form formAllEvents:dataTableAllEvents" actionListener="#{eventJSFManagedBean.updateEvent}" oncomplete="PF('dialogUpdateEvent').show();" ajax="false"/>
+                            </p:column>
+                        </p:row>
+
+                    </p:panelGrid>
+
+                </p:dialog>
+
+            </h:form>
+
+        </div>
+    </ui:define>
+
+</ui:composition>
